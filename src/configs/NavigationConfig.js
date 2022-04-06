@@ -1,5 +1,12 @@
 import { 
-  DashboardOutlined
+  DashboardOutlined,
+  WindowsOutlined,
+  CarOutlined,
+  TeamOutlined,
+  EuroCircleOutlined,
+  SolutionOutlined,
+  LogoutOutlined,
+  TrophyOutlined 
 } from '@ant-design/icons';
 import { APP_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -7,21 +14,21 @@ const dashBoardNavTree = [{
   key: 'dashboard',
   path: `${APP_PREFIX_PATH}/dashboard`,
   title: 'Dashboard',
-  icon: DashboardOutlined,
+  icon: WindowsOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'cars',
   path: `${APP_PREFIX_PATH}/cars`,
   title: 'Cars',
-  icon: DashboardOutlined,
+  icon: CarOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'users',
   path: `${APP_PREFIX_PATH}/users`,
   title: 'Users',
-  icon: DashboardOutlined,
+  icon: TeamOutlined,
   breadcrumb: false,
   submenu: []
 },{
@@ -35,28 +42,28 @@ const dashBoardNavTree = [{
   key: 'earings',
   path: `${APP_PREFIX_PATH}/earnings`,
   title: 'Earnings',
-  icon: DashboardOutlined,
+  icon: EuroCircleOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'role',
   path: `${APP_PREFIX_PATH}/role`,
   title: 'Role',
-  icon: DashboardOutlined,
+  icon: TrophyOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'admin',
   path: `${APP_PREFIX_PATH}/admin`,
   title: 'Admin',
-  icon: DashboardOutlined,
+  icon: SolutionOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'logout',
   path: `${APP_PREFIX_PATH}/logout`,
   title: 'Log Out',
-  icon: DashboardOutlined,
+  icon: LogoutOutlined,
   breadcrumb: false,
   submenu: []
 }]
