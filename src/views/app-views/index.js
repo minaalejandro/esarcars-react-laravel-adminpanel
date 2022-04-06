@@ -7,9 +7,14 @@ export const AppViews = () => {
   return (
     <Suspense fallback={<Loading cover="content"/>}>
       <Switch>
-        <Route path={`${APP_PREFIX_PATH}/home`} component={lazy(() => import(`./home`))} />
-        <Route path={`${APP_PREFIX_PATH}/wasl`} component={lazy(() => import(`./wasl`))} />
-        <Redirect from={`${APP_PREFIX_PATH}`} to={`${APP_PREFIX_PATH}/home`} />
+        <Route path={`${APP_PREFIX_PATH}/dashboard`} component={lazy(() => import(`./dashboard`))} />
+        <Route path={`${APP_PREFIX_PATH}/cars`} component={lazy(() => import(`./cars`))} />
+        <Route path={`${APP_PREFIX_PATH}/users`} component={lazy(() => import(`./users`))} />
+        <Route path={`${APP_PREFIX_PATH}/trips`} component={lazy(() => import(`./trips`))} />
+        <Route path={`${APP_PREFIX_PATH}/earnings`} component={lazy(() => import(`./earnings`))} />
+        <Route path={`${APP_PREFIX_PATH}/role`} component={lazy(() => import(`./role`))} />
+        <Route path={`${APP_PREFIX_PATH}/admin`} component={lazy(() => import(`./admin`))} />
+        <Redirect from={`${APP_PREFIX_PATH}`} to={`${APP_PREFIX_PATH}/dashboard`} />
       </Switch>
     </Suspense>
   )

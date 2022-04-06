@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Wasl = () => {
+const Tripas = () => {
 	return (
 		<div>
-			Wasl 
+			Tripas 
 		</div>
 	)
 }
 
-export default Wasl
+export default Tripas

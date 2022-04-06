@@ -33,7 +33,7 @@ const dashBoardNavTree = [{
   submenu: []
 },{
   key: 'earings',
-  path: `${APP_PREFIX_PATH}/earinings`,
+  path: `${APP_PREFIX_PATH}/earnings`,
   title: 'Earnings',
   icon: DashboardOutlined,
   breadcrumb: false,
