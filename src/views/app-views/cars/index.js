@@ -3,11 +3,10 @@ import { Button, DatePicker, Input } from "antd";
 import { DownloadOutlined } from '@ant-design/icons';
 import Table from './components/table';
 import '../custom.css';
-
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 
-const Cars = () => {
+const Cars =  () => {
 	return (
 		<React.Fragment>
 			<div className='CarBtn'>
@@ -19,14 +18,14 @@ const Cars = () => {
 				style={{ width: 200 }}
 				/>
 			</div>
-			<div>
-				<Button type="default" icon={<DownloadOutlined />}>
+			<div className='DownBtn'>
+				<Button type="default"  icon={<DownloadOutlined />}>
 					CSV
 				</Button>
-				<Button type="default" icon={<DownloadOutlined />}>
+				<Button type="default"  icon={<DownloadOutlined />}>
 					EXCEL
 				</Button>
-				<Button type="default" icon={<DownloadOutlined />}>
+				<Button type="default"  icon={<DownloadOutlined />}>
 					PDF
 				</Button>
 			</div>
