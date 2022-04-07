@@ -38,13 +38,14 @@ export function* signInWithFBEmail() {
 export function* signOut() {
   yield takeEvery(SIGNOUT, function* () {
 		try {
-			const signOutUser = yield call(FirebaseService.signOutRequest);
-			if (signOutUser === undefined) {
+			// const signOutUser = yield call(FirebaseService.signOutRequest);
+			// if (signOutUser === undefined) {
+				console.log("signout==========");
 				localStorage.removeItem(AUTH_TOKEN);
-				yield put(signOutSuccess(signOutUser));
-			} else {
-				yield put(showAuthMessage(signOutUser.message));
-			}
+				yield put(signOutSuccess());
+			// } else {
+			// 	yield put(showAuthMessage(signOutUser.message));
+			// }
 		} catch (err) {
 			yield put(showAuthMessage(err));
 		}

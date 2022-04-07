@@ -3,14 +3,16 @@ import { connect } from "react-redux";
 import { Button, Form, Input, Divider, Alert } from "antd";
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
-import CustomIcon from 'components/util-components/CustomIcon'
 import {  
 	showLoading, 
 	showAuthMessage, 
 	hideAuthMessage,
-	authenticated
+	authenticated,
+	signOut
 } from 'redux/actions/Auth';
+import {
+	AUTH_TOKEN
+} from 'redux/constants/Auth';
 import JwtAuthService from 'services/JwtAuthService'
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion"
@@ -19,7 +21,6 @@ export const LoginForm = (props) => {
 	let history = useHistory();
 
 	const { 
-		otherSignIn, 
 		showForgetPassword, 
 		hideAuthMessage,
 		onForgetPasswordClick,
@@ -32,26 +33,24 @@ export const LoginForm = (props) => {
 		showAuthMessage,
 		token,
 		redirect,
-		allowRedirect
+		allowRedirect,
+		signOut
 	} = props
 
 	const onLogin = values => {
+		console.log("loading = ", props);
 		showLoading()
 		const fakeToken = 'fakeToken'
 		JwtAuthService.login(values).then(resp => {
-			authenticated(fakeToken)
+			localStorage.setItem(AUTH_TOKEN, resp.access_token);
+			authenticated(resp.access_token)
 		}).then(e => {
 			showAuthMessage(e)
+		}).catch(err => {
+			signOut();
 		})
 	};
 
-	const onGoogleLogin = () => {
-		showLoading()
-	}
-
-	const onFacebookLogin = () => {
-		showLoading()
-	}
 
 	useEffect(() => {
 		if (token !== null && allowRedirect) {
@@ -64,30 +63,6 @@ export const LoginForm = (props) => {
 		}
 	});
 	
-	const renderOtherSignIn = (
-		<div>
-			<Divider>
-				<span className="text-muted font-size-base font-weight-normal">or connect with</span>
-			</Divider>
-			<div className="d-flex justify-content-center">
-				<Button 
-					onClick={() => onGoogleLogin()} 
-					className="mr-2" 
-					disabled={loading} 
-					icon={<CustomIcon svg={GoogleSVG}/>}
-				>
-					Google
-				</Button>
-				<Button 
-					onClick={() => onFacebookLogin()} 
-					icon={<CustomIcon svg={FacebookSVG}/>}
-					disabled={loading} 
-				>
-					Facebook
-				</Button>
-			</div>
-		</div>
-	)
 
 	return (
 		<>
@@ -105,17 +80,17 @@ export const LoginForm = (props) => {
 				onFinish={onLogin}
 			>
 				<Form.Item 
-					name="email" 
-					label="Email" 
+					name="name" 
+					label="Username" 
 					rules={[
 						{ 
 							required: true,
-							message: 'Please input your email',
+							message: 'Please input username',
 						},
-						{ 
-							type: 'email',
-							message: 'Please enter a validate email!'
-						}
+						// { 
+						// 	type: 'email',
+						// 	message: 'Please enter a validate email!'
+						// }
 					]}>
 					<Input prefix={<MailOutlined className="text-primary" />}/>
 				</Form.Item>
@@ -149,9 +124,6 @@ export const LoginForm = (props) => {
 						Sign In
 					</Button>
 				</Form.Item>
-				{
-					otherSignIn ? renderOtherSignIn : null
-				}
 				{ extra }
 			</Form>
 		</>
@@ -181,7 +153,8 @@ const mapDispatchToProps = {
 	showAuthMessage,
 	showLoading,
 	hideAuthMessage,
-	authenticated
+	authenticated,
+	signOut
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)

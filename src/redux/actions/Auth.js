@@ -29,6 +29,7 @@ export const authenticated = (token) => {
 };
 
 export const signOut = () => {
+  console.log("action++++++++++++++++++++++++++++++++++")
   return {
     type: SIGNOUT
   };

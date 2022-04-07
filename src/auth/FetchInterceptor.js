@@ -11,7 +11,8 @@ const service = axios.create({
 
 // Config
 const ENTRY_ROUTE = '/auth/login'
-const TOKEN_PAYLOAD_KEY = 'authorization'
+// const TOKEN_PAYLOAD_KEY = 'authorization'
+const TOKEN_PAYLOAD_KEY = 'bearer'
 const PUBLIC_REQUEST_KEY = 'public-request'
 
 // API Request interceptor
