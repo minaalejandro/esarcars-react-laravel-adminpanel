@@ -3,6 +3,8 @@ import { Button, DatePicker, Input } from "antd";
 import { DownloadOutlined } from '@ant-design/icons';
 import Table from './components/table';
 import '../custom.css';
+// import '../fontawesome.css';
+
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 

@@ -13,56 +13,56 @@ import { APP_PREFIX_PATH } from 'configs/AppConfig'
 const dashBoardNavTree = [{
   key: 'dashboard',
   path: `${APP_PREFIX_PATH}/dashboard`,
-  title: 'Dashboard',
+  title: 'sidenav.menu.dashboard',
   icon: WindowsOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'cars',
   path: `${APP_PREFIX_PATH}/cars`,
-  title: 'Cars',
+  title: 'sidenav.menu.cars',
   icon: CarOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'users',
   path: `${APP_PREFIX_PATH}/users`,
-  title: 'Users',
+  title: 'sidenav.menu.users',
   icon: TeamOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'trips',
   path: `${APP_PREFIX_PATH}/trips`,
-  title: 'Trips',
+  title: 'sidenav.menu.trips',
   icon: DashboardOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'earings',
   path: `${APP_PREFIX_PATH}/earnings`,
-  title: 'Earnings',
+  title: 'sidenav.menu.earings',
   icon: EuroCircleOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'role',
   path: `${APP_PREFIX_PATH}/role`,
-  title: 'Role',
+  title: 'sidenav.menu.role',
   icon: TrophyOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'admin',
   path: `${APP_PREFIX_PATH}/admin`,
-  title: 'Admin',
+  title: 'sidenav.menu.admin',
   icon: SolutionOutlined,
   breadcrumb: false,
   submenu: []
 },{
   key: 'logout',
   path: `${APP_PREFIX_PATH}/logout`,
-  title: 'Log Out',
+  title: 'sidenav.menu.logout',
   icon: LogoutOutlined,
   breadcrumb: false,
   submenu: []

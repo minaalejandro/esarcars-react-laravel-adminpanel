@@ -1,6 +1,15 @@
 {
 	"home": "Home",
 	
+	"sidenav.menu.dashboard": "Dashboard",
+	"sidenav.menu.cars": "Cars",
+	"sidenav.menu.users": "Users",
+	"sidenav.menu.trips": "Trips",
+	"sidenav.menu.earings": "Earings",
+	"sidenav.menu.role": "Role",
+	"sidenav.menu.admin": "Admin",
+	"sidenav.menu.logout": "Logout",
+
 	"sidenav.dashboard": "Dashboard",
 	"sidenav.dashboard.default": "Default",
 	"sidenav.dashboard.analytic": "Analytic",

@@ -5,3 +5,52 @@
 .DownBtn {
     padding: 15px;
 }
+.car_info {
+    width: 320px;
+    min-height: 350px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px
+}
+.car_info_tab{
+    display: flex;
+}
+.photo_info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding:5px;
+    margin:5px;
+}
+.car_info_detail {
+    padding:11px;
+}
+.car_info_detail1 {
+    padding:13px;
+}
+.car_item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+}
+.car_item_detail {
+    padding: 11px;
+    margin-right: 20px;
+}
+.car_info_icon {
+    display: flex;
+    align-items: center;
+}
+
+.car_info_icon .anticon-close-circle {
+    color: red;
+}
+
+.car_info_icon .anticon-check-circle{
+    color: green;
+}
+

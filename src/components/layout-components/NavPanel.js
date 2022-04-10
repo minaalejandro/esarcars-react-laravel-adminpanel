@@ -25,7 +25,7 @@ export class NavPanel extends Component {
       <>
         <Menu mode="horizontal">
           <Menu.Item key="panel" onClick={this.showDrawer}>
-            <a href><SettingOutlined className="nav-icon mr-0" /></a>
+            <a><SettingOutlined className="nav-icon mr-0" /></a>
           </Menu.Item>
         </Menu>
         <Drawer

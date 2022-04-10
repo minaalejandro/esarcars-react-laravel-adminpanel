@@ -21,7 +21,7 @@ const LoginTwo = props => {
 						<Row justify="center">
 							<Col xs={24} sm={24} md={20} lg={12} xl={8}>
 								<h1>Sign In</h1>
-								<p>Don't have an account yet? <a href="/auth/register-2">Sign Up</a></p>
+								{/* <p>Don't have an account yet? <a href="/auth/register-2">Sign Up</a></p> */}
 								<div className="mt-4">
 									<LoginForm {...props}/>
 								</div>

@@ -12,7 +12,7 @@ const service = axios.create({
 // Config
 const ENTRY_ROUTE = '/auth/login'
 // const TOKEN_PAYLOAD_KEY = 'authorization'
-const TOKEN_PAYLOAD_KEY = 'bearer'
+const TOKEN_PAYLOAD_KEY = 'Authorization'
 const PUBLIC_REQUEST_KEY = 'public-request'
 
 // API Request interceptor
@@ -20,7 +20,7 @@ service.interceptors.request.use(config => {
 	const jwtToken = localStorage.getItem(AUTH_TOKEN)
 	
   if (jwtToken) {
-    config.headers[TOKEN_PAYLOAD_KEY] = jwtToken
+    config.headers[TOKEN_PAYLOAD_KEY] = "bearer " + jwtToken
   }
 
   if (!jwtToken && !config.headers[PUBLIC_REQUEST_KEY]) {
