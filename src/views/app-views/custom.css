@@ -25,6 +25,7 @@
     border-radius: 0.3rem;
     padding:5px;
     margin:5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .car_info_detail {
     padding:11px;
@@ -46,11 +47,25 @@
     align-items: center;
 }
 
-.car_info_icon .anticon-close-circle {
+.anticon-close-circle {
     color: red;
 }
 
-.car_info_icon .anticon-check-circle{
+.anticon-check-circle{
     color: green;
 }
-
+.car_image {
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    margin-left: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.car_image img {
+    padding: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.anticon-check {
+    color: green;
+}
+.anticon-delete {
+    color: red;
+}

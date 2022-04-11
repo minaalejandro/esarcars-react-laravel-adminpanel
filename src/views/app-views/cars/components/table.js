@@ -1,16 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Table } from 'antd';
+import { Table, Modal } from 'antd';
 import fetch from 'auth/FetchInterceptor'
 import '../../custom.css';
 import { 
   CheckCircleOutlined,
   CloseCircleOutlined,
   DownOutlined,
-  UpOutlined  
+  UpOutlined,
+  CheckOutlined,
+  DeleteOutlined   
 } from '@ant-design/icons';
 
-// import '../../fontawesome.css';
 
+const { confirm } = Modal;
+const showConfirmDelete = (id) => () => {
+  confirm({
+    title: "Do you want to delete these items?",
+    content:
+      "When clicked the OK button, this dialog will be closed after 1 second",
+    onOk() {
+      fetch({
+        url: '/cars/restore/' + id,
+        method: 'post',
+        headers: {
+          'public-request': 'true'
+        },
+        }).then((resp) => {
+          // console.log(resp)
+          // return new Promise((resolve, reject) => {
+          //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          // }).catch(() => console.log("Oops errors!"));
+          
+        })
+    },
+    onCancel() {}
+  });
+}
+const showConfirmRestore = (id) => () => {
+  // console.log(id);
+  confirm({
+    title: "Do you want to restore these items?",
+    content:
+      "When clicked the OK button, this dialog will be closed after 1 second",
+    onOk() {
+      fetch({
+        url: '/cars/delete/' + id,
+        method: 'post',
+        headers: {
+          'public-request': 'true'
+        },
+        }).then((resp) => {
+         console.log(resp);
+         if (resp == "Car is deleted") {
+           console.log("ddddd")
+         }
+          // return new Promise((resolve, reject) => {
+          //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          // }).catch(() => console.log("Oops errors!"));
+          
+        })
+    },
+    onCancel() {}
+  });
+}
 const columns = [
   { title: 'CARD ID', dataIndex: 'id', key: 'card_id' },
   { title: 'Manufactuer', dataIndex: 'car_manufacturer', key: 'manufacuer' },
@@ -23,196 +75,83 @@ const columns = [
   { title: 'CreatedOn', dataIndex: 'updated_at', key: 'create_on' },
   {
     title: 'Delete/Restore',
-    dataIndex: '',
-    key: 'x',
-    render: () => <a href="/#">Delete</a>,
+    render: (rowData) => {
+      // console.log(rowData.id);
+      if( rowData.active == "NO")  {
+        const button = (
+          <CheckOutlined
+          onClick={showConfirmDelete(rowData.id)}
+          >
+          </CheckOutlined>
+        );
+        return button;
+      } else {
+        const button = (
+          <DeleteOutlined 
+          onClick={showConfirmRestore(rowData.id)}
+          >
+          </DeleteOutlined >
+        );
+        return button;
+      }
+      
+    }
   },
-  { title: 'Verefied', dataIndex: 'verified', key: 'verified' },
+  { title: 'Verefied',
+    render: (rowData) => { 
+      // console.log(rowData);
+      if( rowData.verified_insurance == 0)  {
+        
+          return <div> <CloseCircleOutlined/> </div>
+    
+      } else {
+          return <div> <CheckCircleOutlined/> </div>
+      }
+    },
+  }
 ];
 
-// const data = [
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-//   {
-//     key: 1,
-//     card_id: '10428',
-//     manufactuer: 'Toyota',
-//     model: 'Camry',
-//     year: 2016,
-//     city: 'kaly',
-//     active: 'No',
-//     owner_id: '10428',
-//     owner_name: 'superadmin',
-//     created_on: '2018-01-01',
-//     verified: 'true'
-//   },
-  
-// ];
-
-export default function Expand() {
+export default function Expand(props) {
+  console.log("startDate: ", props.startDate);
+  console.log("endDate: ", props.endDate);
   const [data, setData] = useState([]);
+  const [images, setImages] = useState({});
   const [selCar, setSelCar] = useState(-1);
   const [photo_show, setPhotoShow] = useState(false);
   const [car_insurance_show, setCarInsuranceShow] = useState(false);
   const [car_registration_show, setCarRegistrationShow] = useState(false);
   const [owner_show, setOwnerShow] = useState(false);
+  const [pagination, setPagination] = useState({});
+  const [loading , setLoading] = useState(false);
   useEffect(()=>{
-      fetchProducts();
+    if (props.startDate === undefined)
+      fetchProducts({page: 1});
+    else 
+      fetchProducts({page: 1, dates: props.startDate+","+props.endDate});
   },[]);
 
-  const fetchProducts = () => {
+  useEffect(()=>{
+    if (props.startDate === undefined)
+      fetchProducts({page: 1});
+    else 
+      fetchProducts({page: 1, dates: props.startDate+","+props.endDate});
+  },[props.startDate, props.endDate]);
+
+  const fetchProducts = (params) => {
+    setLoading(true);
       fetch({
         url: '/cars',
         method: 'get',
         headers: {
           'public-request': 'true'
         },
-           data: {page: 1}
+          params
         }).then((resp) => {
-           console.log(resp.data.cars)
+         console.log(resp)
           var data =[];
           var new_data = {};
+          setPagination({...pagination, total: resp.meta.total});
+          setLoading(false);
           resp.data.cars.map((item)=> {
             item.active = item.active == 1 ? "Yes" : "NO";    
             new_data = {
@@ -251,23 +190,28 @@ export default function Expand() {
             }                    
             data.push(new_data);
           })
-          //  console.log(data);
           setData(data);
         })
   }
 
   const expandPhotoDiv = (key) => () => {
-    setSelCar(key);
-    setPhotoShow(s => !s);
-    fetch({
-      url: '/car/'+key,
-      method: 'get',
-      headers: {
-        'public-request': 'true'
-      },
-      }).then((resp) => {
-        console.log(resp);
-      })
+    if (selCar !== key) {
+      setSelCar(key);
+
+      fetch({
+        url: '/car/'+key,
+        method: 'get',
+        headers: {
+          'public-request': 'true'
+        },
+        }).then((resp) => {
+          
+          // console.log(images, key);
+          setImages({...images, [key]: resp.images});
+          setPhotoShow(true);
+        })
+    } else 
+      setPhotoShow(s => !s);
   }
   const expandCarInsuranceDiv = () => {
     setCarInsuranceShow(s => !s);
@@ -278,6 +222,15 @@ export default function Expand() {
   const expendOwnerDiv = () => {
     setOwnerShow(s => !s);
   }
+
+  const handleTableChange = (pager, filters, sorter) => {
+    setPagination({...pagination, current: pager.current});
+    fetchProducts({
+      page: pager.current,
+      results: pager.pageSize,
+      dates: props.startDate+","+props.endDate,
+    });
+  };
 
   return (
     <Table
@@ -402,10 +355,14 @@ export default function Expand() {
             </div>
            </div>
            <div>
-            <div className="photo_info"><h3>Photos:</h3>
+            <div className="photo_info"><h3>Photos:{record.key in images ? images[record.key].length : 0}</h3>
               <button onClick={expandPhotoDiv(record.key)}>{photo_show && selCar === record.key ? <UpOutlined/> : <DownOutlined />}</button>
             </div>
-            {photo_show && selCar === record.key && <div>ssss111</div>}
+            {photo_show && selCar === record.key && <div className="car_image">{
+            record.key in images && images[record.key].map(item=> {
+               return <div ><img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="350" height="230"/></div>
+            })
+            }</div>}
             <div className="photo_info"><h3>Car insurance:</h3>
               <button onClick={expandCarInsuranceDiv}>{car_insurance_show ? <UpOutlined/> : <DownOutlined />}</button>         
             </div>
@@ -424,6 +381,9 @@ export default function Expand() {
          </div>,
       }}
       dataSource={data}
+      pagination={pagination}
+      onChange={handleTableChange}
+      loading={loading}
     />
   );
 }
