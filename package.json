@@ -20,6 +20,8 @@
     "google-map-react": "^2.1.9",
     "history": "^5.0.0",
     "immutability-helper": "^3.1.1",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.23",
     "lodash": "^4.17.20",
     "moment": "^2.29.2",
     "node-sass": "^4.14.1",
