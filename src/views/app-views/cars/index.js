@@ -4,6 +4,8 @@ import { Button, DatePicker, Input } from "antd";
 import { DownloadOutlined } from '@ant-design/icons';
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 import Table from './components/table';
 import '../custom.css';
@@ -29,13 +31,11 @@ const Cars =  () => {
 
 	const reloadButton = () =>{
 		setReloadState(s => !s);
-		console.log(reloadState);
 	}
 	const getTableData=(data)=>{
-		// console.log('tabledata')
-		 console.log(data)
 		setTableData(data);
 	}
+	//download pdf
 	const exportPDF = () => {
 		const unit = "pt";
 		const size = "A4"; // Use A1, A2, A3 or A4
@@ -46,7 +46,7 @@ const Cars =  () => {
 	
 		doc.setFontSize(15);
 	
-		const title = "My Awesome Report";
+		const title = "Cars List";
 		const headers = [["CARDID", "Manufactuer","Model","Year","City","Active","OwnerId","OwnerName","CreatedOn"]];
 	
 		const data = tableData.map(item=> [
@@ -72,6 +72,31 @@ const Cars =  () => {
 		doc.save("report.pdf")
 	  }
 
+	//download xlsx
+	const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+   	const fileExtension = '.xlsx';
+
+    const exportToEXL = () => {
+		 const data1 = tableData.map(item=> [
+			item.key,
+			item.car_manufacturer, 
+			item.car_model,
+			item.production_year,
+			item.car_city,
+			item.active,
+			item.owner_id,
+			item.owner_name,
+			item.created_at,
+		]);
+        const ws = XLSX.utils.json_to_sheet(data1);
+        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], {type: fileType});
+        FileSaver.saveAs(data,  fileExtension);
+    }
+	//download csv
+
+
 	return (
 		<React.Fragment>
 			<div className='CarBtn'>
@@ -86,13 +111,13 @@ const Cars =  () => {
 				/>
 			</div>
 			<div className='DownBtn'>
-				<Button type="default"   icon={<DownloadOutlined />} onClick={() =>exportPDF()}>
+				<Button type="default"   icon={<DownloadOutlined />}  >
 					CSV
 				</Button>
-				<Button type="default"  icon={<DownloadOutlined />}>
+				<Button type="default"  icon={<DownloadOutlined /> } onClick={(e) => exportToEXL()}>
 					EXCEL
 				</Button>
-				<Button type="default"  icon={<DownloadOutlined />}>
+				<Button type="default"  icon={<DownloadOutlined />} onClick={() =>exportPDF()}>
 					PDF
 				</Button>
 			</div>

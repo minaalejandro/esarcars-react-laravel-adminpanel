@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal } from 'antd';
+import { Table, Modal, Button } from 'antd';
 import fetch from 'auth/FetchInterceptor'
 import '../../custom.css';
 import { 
@@ -12,12 +12,14 @@ import {
 } from '@ant-design/icons';
 
 export default function Expand(props) {
-  console.log(props.searchText);
-  console.log(props)
+
   const { confirm } = Modal;
   const [data, setData] = useState([]);
   const [images, setImages] = useState({});
   const [selCar, setSelCar] = useState(-1);
+  const[ selCarInsurance ,setSelCarInsurance] = useState(-1);
+  const[ selCarRegistraion ,setSelCarRegistraion] = useState(-1);
+  const[ selOwner ,setSelOwner] = useState(-1);
   const [photo_show, setPhotoShow] = useState(false);
   const [car_insurance_show, setCarInsuranceShow] = useState(false);
   const [car_registration_show, setCarRegistrationShow] = useState(false);
@@ -25,6 +27,11 @@ export default function Expand(props) {
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [changeButton, setChangeButton] = useState(true);
+  const [carInsuranceData, setCarInsuranceData] = useState({});
+  const [carVerifyButton, setCarVerifyButton] = useState(true);
+  const [carRegiVerifyButton, setCarRegiVerifyButton] = useState(true);
+  const [carRegistraionData, setCarRegistrationData] = useState({});
+  
   const showConfirmDelete = (id) => () => {
     confirm({
       title: "Do you want to delete these items?",
@@ -65,6 +72,100 @@ export default function Expand(props) {
             setChangeButton(false);
           } else {
             setChangeButton(true);
+          }
+        })
+      },
+      onCancel() { }
+    });
+  }
+  const showConfirmDeny = (id) => () => {
+    confirm({
+      title: "Do you want to change these items?",
+      content:
+      "Are you sure you want to change insurance verification status of car",
+      onOk() {
+        fetch({
+          url: '/car/insurance/deny/' + id,
+          method: 'post',
+          headers: {
+            'public-request': 'true'
+          },
+        }).then((resp) => {
+          if(carVerifyButton == true) {
+            setCarVerifyButton(false);
+          } else {
+            setCarVerifyButton(true);
+          }
+        })
+      },
+      onCancel() { }
+    });
+  }
+  const showConfirmVerify = (id) => () => {
+    confirm({
+      title: "Do you want to change these items?",
+      content:
+        "Are you sure you want to change insurance verification status of car",
+      onOk() {
+        fetch({
+          url: '/car/insurance/approve/' + id,
+          method: 'post',
+          headers: {
+            'public-request': 'true'
+          },
+        }).then((resp) => {
+          if(carVerifyButton == true) {
+            setCarVerifyButton(false);
+          } else {
+            setCarVerifyButton(true);
+          }
+        })
+      },
+      onCancel() { }
+    });
+  }
+  const showRegistrationDeny = (id) => () => {
+    confirm({
+      title: "Do you want to change these items?",
+      content:
+        "Are you sure you want to change insurance verification status of car",
+      onOk() {
+        fetch({
+          url: '/car/registration/deny/' + id,
+          method: 'post',
+          headers: {
+            'public-request': 'true'
+          },
+        }).then((resp) => {
+          console.log(resp);
+          if(carRegiVerifyButton == true) {
+            setCarRegiVerifyButton(false);
+          } else {
+            setCarRegiVerifyButton(true);
+          }
+        })
+      },
+      onCancel() { }
+    });
+  }
+  const showRegistrationVerify = (id) => () => {
+    confirm({
+      title: "Do you want to change these items?",
+      content:
+        "Are you sure you want to change insurance verification status of car",
+      onOk() {
+        fetch({
+          url: '/car/registration/approve/' + id,
+          method: 'post',
+          headers: {
+            'public-request': 'true'
+          },
+        }).then((resp) => {
+          console.log(resp);
+          if(carRegiVerifyButton == true) {
+            setCarRegiVerifyButton(false);
+          } else {
+            setCarRegiVerifyButton(true);
           }
         })
       },
@@ -118,7 +219,6 @@ export default function Expand(props) {
     }
   ];
  
-  console.log(props)
   useEffect(() => {
     if (props.startDate === undefined || props.searchText === undefined)
       fetchProducts({ page: 1 });
@@ -135,11 +235,7 @@ export default function Expand(props) {
 
   useEffect(() => {
     fetchProducts();
-  }, [changeButton, props.reloadState]);
-  // const handleData =(val)=>{
-  //   console.log('sdsdfsdf');
-  //   props.testProp(val)
-  // }
+  }, [changeButton, props.reloadState, carVerifyButton, carRegiVerifyButton]);
   const fetchProducts = (params) => {
     setLoading(true);
     fetch({
@@ -215,14 +311,44 @@ export default function Expand(props) {
     } else
       setPhotoShow(s => !s);
   }
-  const expandCarInsuranceDiv = () => {
-    setCarInsuranceShow(s => !s);
+  const expandCarInsuranceDiv = (key) => () =>{
+    if (selCarInsurance !== key) {
+      setSelCarInsurance(key);
+      fetch({
+        url: '/car/insurance/' + key,
+        method: 'get',
+        headers: {
+          'public-request': 'true'
+        },
+      }).then((resp) => { 
+        // console.log(resp);
+        setCarInsuranceData(resp);      
+      })
+    } else
+      setCarInsuranceShow(s => !s);
   }
-  const expandCarRegistrationDiv = () => {
-    setCarRegistrationShow(s => !s);
+  console.log(carInsuranceData);
+  const expandCarRegistrationDiv = (key)=>() => {
+    if (selCarRegistraion !== key) {
+      setSelCarRegistraion(key);
+      fetch({
+        url: '/car/registration/' + key,
+        method: 'get',
+        headers: {
+          'public-request': 'true'
+        },
+      }).then((resp) => { 
+        console.log(resp);
+        setCarRegistrationData(resp); 
+      })
+      } else
+      setCarRegistrationShow(s => !s);
   }
-  const expendOwnerDiv = () => {
-    setOwnerShow(s => !s);
+  const expendOwnerDiv = (key) =>() => {
+    if (selOwner !== key) {
+      setSelOwner(key);
+      } else
+       setOwnerShow(s => !s);
   }
 
   const handleTableChange = (pager, filters, sorter) => {
@@ -366,21 +492,117 @@ export default function Expand(props) {
                   return <div ><img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="350" height="230" /></div>
                 })
               }</div>}
-              <div className="photo_info"><h3>Car insurance:</h3>
-                <button onClick={expandCarInsuranceDiv}>{car_insurance_show ? <UpOutlined /> : <DownOutlined />}</button>
+              <div className="photo_info"><h3>Car insurance</h3>
+                <button onClick={expandCarInsuranceDiv(record.key)}>{car_insurance_show && selCarInsurance=== record.key ?  <UpOutlined /> : <DownOutlined />}</button>
               </div>
-              {car_insurance_show && <div>ssss222</div>}
-              <div className="photo_info"><h3>Car registration:</h3>
-                <button onClick={expandCarRegistrationDiv}>{car_registration_show ? <UpOutlined /> : <DownOutlined />}</button>
+              {car_insurance_show && selCarInsurance=== record.key &&
+                  <div>
+                    <div className="car_insurance_body">
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Car ID</div>
+                        <div className="car_insurance_detail">{carInsuranceData.car_id}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Created at</div>
+                        <div className="car_insurance_detail">{carInsuranceData.created_at}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Date of issue</div>
+                        <div className="car_insurance_detail">{carInsuranceData.date_of_issue}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Detectable amount</div>
+                        <div className="car_insurance_detail">{carInsuranceData.detectable_amount}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Expiration date</div>
+                        <div className="car_insurance_detail">{carInsuranceData.expiration_date}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">ID</div>
+                        <div className="car_insurance_detail">{carInsuranceData.id}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Policy number</div>
+                        <div className="car_insurance_detail">{carInsuranceData.policy_number}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Updated at</div>
+                        <div className="car_insurance_detail">{carInsuranceData.updated_at}</div>
+                      </div>
+                    </div>
+                    <div className="car_insurance_footer">
+                      {record.verified_insurance == 1 ? <Button type="primary" danger className="verify_button"  onClick={showConfirmDeny(record.key)}
+                      >DENY</Button> :<Button type="primary" className="verify_button" onClick={showConfirmVerify(record.key)}>VERIFY</Button>}       
+                    </div>
+                  </div>}
+              <div className="photo_info"><h3>Car registration</h3>
+                <button onClick={expandCarRegistrationDiv(record.key)}>{car_registration_show && selCarRegistraion=== record.key? <UpOutlined /> : <DownOutlined />}</button>
                 {/* <button onClick={expandCarRegistrationDiv}>{car_registration_show ? '+' : '-'}</button> */}
               </div>
-              {car_registration_show && <div>ssss333</div>}
+              {car_registration_show && selCarRegistraion=== record.key&& 
+                <div>
+                  <div className="car_registraion_body">
+                    <div className="car_registraion_body_left"></div>
+                    <div className="car_registraion_body_right">
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Car ID</div>
+                        <div className="car_insurance_detail">{carRegistraionData.car_id}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">City</div>
+                        <div className="car_insurance_detail">{carRegistraionData.city}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">State</div>
+                        <div className="car_insurance_detail">{carRegistraionData.state}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Country</div>
+                        <div className="car_insurance_detail">{carRegistraionData.country}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Created at</div>
+                        <div className="car_insurance_detail">{carRegistraionData.created_at}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Date of issue</div>
+                        <div className="car_insurance_detail">{carRegistraionData.date_of_issue}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Expiration date</div>
+                        <div className="car_insurance_detail">{carRegistraionData.expiration_date}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail"> ID</div>
+                        <div className="car_insurance_detail">{carRegistraionData.id}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Licence plate</div>
+                        <div className="car_insurance_detail">{carRegistraionData.licence_plate}</div>
+                      </div>
+                      <div className="car_item">
+                        <div className="car_insurance_detail">Updated at</div>
+                        <div className="car_insurance_detail">{carRegistraionData.updated_at}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="car_registrion_footer">
+                      {record.verified_registration == 1 ? <Button type="primary" danger className="verify_button"  onClick={showRegistrationDeny(record.key)}
+                      >DENY</Button> :<Button type="primary" className="verify_button" onClick={showRegistrationVerify(record.key)}>VERIFY</Button>}       
+                  </div>
+                </div>}
             </div>
-            <div className="photo_info"><h3>Owner:</h3>
-              <button onClick={expendOwnerDiv}>{owner_show ? <UpOutlined /> : <DownOutlined />}</button>
+            <div className="photo_info"><h3>Owner</h3>
+              <button onClick={expendOwnerDiv(record.key)}>{owner_show && selOwner=== record.key ? <UpOutlined /> : <DownOutlined />}</button>
               {/* <button onClick={expendOwnerDiv}>{owner_show ? '+' : '-'}</button> */}
             </div>
-            {owner_show && <div>ssss111</div>}
+            {owner_show && selOwner=== record.key &&
+              <div>
+                <div className="owner"></div>
+                <div className="owner"></div>
+              </div>
+              }
           </div>,
       }}
       dataSource={data}

@@ -37,6 +37,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0px 20px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .car_item_detail {
     padding: 11px;
@@ -68,4 +69,51 @@
 }
 .anticon-delete {
     color: red;
+}
+.car_insurance_body{
+    width: 1010px;
+    min-height: 400px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px
+}
+.car_insurance_detail{
+    padding:16px;
+}
+.car_registraion_body{
+    display: flex;
+}
+.car_registraion_body_left{
+    width: 350px;
+    height: 400px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.car_registraion_body_right {
+    width: 450px;
+    min-height: 500px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px
+}
+.owner{
+    width: 450px;
+    min-height: 500px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding:5px;
+}
+.car_insurance_footer{
+    margin-left:10px;
 }
