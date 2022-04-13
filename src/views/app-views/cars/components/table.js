@@ -137,7 +137,6 @@ export default function Expand(props) {
             'public-request': 'true'
           },
         }).then((resp) => {
-          console.log(resp);
           if(carRegiVerifyButton == true) {
             setCarRegiVerifyButton(false);
           } else {
@@ -161,7 +160,6 @@ export default function Expand(props) {
             'public-request': 'true'
           },
         }).then((resp) => {
-          console.log(resp);
           if(carRegiVerifyButton == true) {
             setCarRegiVerifyButton(false);
           } else {
@@ -251,7 +249,6 @@ export default function Expand(props) {
       setPagination({ ...pagination, total: resp.meta.total });
       setLoading(false);
       resp.data.cars.map((item) => {
-        console.log(item);
         item.active = item.active == 1 ? "Yes" : "NO";
         new_data = {
           key: item.id,
@@ -316,6 +313,7 @@ export default function Expand(props) {
           // description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
         }
         data.push(new_data);
+        console.log(data);
       })
       setData(data);
       props.getTableData(data)
@@ -357,7 +355,6 @@ export default function Expand(props) {
     } else
       setCarInsuranceShow(s => !s);
   }
-  console.log(carInsuranceData);
   const expandCarRegistrationDiv = (key)=>() => {
     if (selCarRegistraion !== key) {
       setSelCarRegistraion(key);
@@ -368,7 +365,6 @@ export default function Expand(props) {
           'public-request': 'true'
         },
       }).then((resp) => { 
-        console.log(resp);
         setCarRegistrationShow(true);
         setCarRegistrationData(resp); 
       })
