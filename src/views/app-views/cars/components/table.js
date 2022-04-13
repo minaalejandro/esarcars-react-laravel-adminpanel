@@ -251,6 +251,7 @@ export default function Expand(props) {
       setPagination({ ...pagination, total: resp.meta.total });
       setLoading(false);
       resp.data.cars.map((item) => {
+        console.log(item);
         item.active = item.active == 1 ? "Yes" : "NO";
         new_data = {
           key: item.id,
@@ -262,6 +263,34 @@ export default function Expand(props) {
           active: item.active,
           owner_id: item.owner.id,
           owner_name: item.owner.first_name + item.owner.last_name,
+          first_name: item.owner.first_name,
+          last_name: item.owner.last_name,
+          email: item.owner.email,
+          phone_number: item.owner.phone_number,
+          owner_created_at : item.owner.created_at,
+          owner_updated_at: item.owner.updated_at,
+          work_from_time: item.owner.work_from_time,
+          work_until_time: item.owner.work_until_time,
+          country_code: item.owner.country_code,
+          account_number: item.owner.account_number,
+          hold_name: item.owner.holder_name,
+          iban: item.owner.iban,
+          trips: item.owner.trips,
+          listed: item.owner.listed,
+          user_active_status: item.owner.user_active_status,
+          approved_to_drive: item.owner.approved_to_drive,
+          email_verified: item.owner.email_verified,
+          id_verified: item.owner.id_verified,
+          phone_verified: item.owner.phone_verified,
+          reviewed: item.owner.reviewed,
+          sms_notifications: item.owner.sms_notifications,
+          car_trips: item.owner.car_trips,
+          count_stars: item.owner.count_stars,
+          user_stars: item.owner.user_stars,
+          count_penalty_owner: item.owner.count_penalty_owner,
+          count_penalty_renter: item.owner.count_penalty_renter,
+          penalty_amount: item.owner.penalty_amount,
+          penalty_period: item.owner.penalty_period,
           updated_at: item.created_at,
           style: item.style,
           type: item.type,
@@ -543,7 +572,9 @@ export default function Expand(props) {
               {car_registration_show && selCarRegistraion=== record.key&& 
                 <div>
                   <div className="car_registraion_body">
-                    <div className="car_registraion_body_left"></div>
+                    <div className="car_registraion_body_left">
+                    <img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + carRegistraionData.small_car_registration_image} width="340" height="390" />
+                    </div>
                     <div className="car_registraion_body_right">
                       <div className="car_item">
                         <div className="car_insurance_detail">Car ID</div>
@@ -599,8 +630,126 @@ export default function Expand(props) {
             </div>
             {owner_show && selOwner=== record.key &&
               <div>
-                <div className="owner"></div>
-                <div className="owner"></div>
+                <div className="owner">
+                  <div className="car_item">
+                    <div className="car_insurance_detail">First name</div>
+                    <div className="car_insurance_detail">{record.first_name}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Last name</div>
+                    <div className="car_insurance_detail">{record.last_name}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">ID</div>
+                    <div className="car_insurance_detail">{record.owner_id}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail"> E-mail</div>
+                    <div className="car_insurance_detail">{record.email}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Phone number</div>
+                    <div className="car_insurance_detail">{record.phone_number}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Created at</div>
+                    <div className="car_insurance_detail">{record.owner_created_at}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Updated at</div>
+                    <div className="car_insurance_detail">{record.owner_updated_at}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Work from time</div>
+                    <div className="car_insurance_detail">{record.work_from_time}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Work until time</div>
+                    <div className="car_insurance_detail">{record.work_until_time}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Country code</div>
+                    <div className="car_insurance_detail">{record.country_code}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Account number</div>
+                    <div className="car_insurance_detail">{record.account_number}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Holder name</div>
+                    <div className="car_insurance_detail">{record.hold_name}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">IBAN</div>
+                    <div className="car_insurance_detail">{record.iban}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Trips</div>
+                    <div className="car_insurance_detail">{record.trips}</div>
+                  </div>
+                  <div className="car_item">
+                    <div className="car_insurance_detail">Listed</div>
+                    <div className="car_insurance_detail">{record.listed}</div>
+                  </div>
+                </div>
+                <div className="owner">
+                  <div className="car_item">
+                      <div className="car_insurance_detail">User active</div>
+                      <div className="car_insurance_detail">{record.user_active_status ==1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Approved to drive</div>
+                      <div className="car_insurance_detail">{record.approved_to_drive ==1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">E-mail verified</div>
+                      <div className="car_insurance_detail">{record.email_verified ==1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">ID verified</div>
+                      <div className="car_insurance_detail">{record.id_verified == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Phone verified</div>
+                      <div className="car_insurance_detail">{record.phone_verified == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Reviewed</div>
+                      <div className="car_insurance_detail">{record.reviewed == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">SMS notifications</div>
+                      <div className="car_insurance_detail">{record.sms_notifications == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Car trips</div>
+                      <div className="car_insurance_detail">{record.car_trips}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Count stars</div>
+                      <div className="car_insurance_detail">{record.count_stars}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">User stars</div>
+                      <div className="car_insurance_detail">{record.user_stars}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Penalties as owner</div>
+                      <div className="car_insurance_detail">{record.count_penalty_owner}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Penalties as renter</div>
+                      <div className="car_insurance_detail">{record.count_penalty_renter}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Penalty amount</div>
+                      <div className="car_insurance_detail">{record.penalty_amount}</div>
+                    </div>
+                    <div className="car_item">
+                      <div className="car_insurance_detail">Penalty period</div>
+                      <div className="car_insurance_detail">{record.penalty_period}</div>
+                    </div>
+                </div>
               </div>
               }
           </div>,
