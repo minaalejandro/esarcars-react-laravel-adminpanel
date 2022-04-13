@@ -59,6 +59,7 @@
     outline: 0.5px ridge rgba(209, 209, 209, 0.6);
     margin-left: 5px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    display: flex;
 }
 .car_image img {
     padding: 5px;
@@ -119,4 +120,11 @@
 }
 .car_registrion_footer {
     margin-left:  5px;
+}
+.total_owner {
+    display: flex;
+}
+.UserBtn {
+    justify-content: space-between;
+    display: flex;
 }

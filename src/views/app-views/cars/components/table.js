@@ -351,7 +351,8 @@ export default function Expand(props) {
         },
       }).then((resp) => { 
         // console.log(resp);
-        setCarInsuranceData(resp);      
+        setCarInsuranceData(resp);  
+        setCarInsuranceShow(true);
       })
     } else
       setCarInsuranceShow(s => !s);
@@ -368,6 +369,7 @@ export default function Expand(props) {
         },
       }).then((resp) => { 
         console.log(resp);
+        setCarRegistrationShow(true);
         setCarRegistrationData(resp); 
       })
       } else
@@ -376,6 +378,7 @@ export default function Expand(props) {
   const expendOwnerDiv = (key) =>() => {
     if (selOwner !== key) {
       setSelOwner(key);
+      setOwnerShow(true);
       } else
        setOwnerShow(s => !s);
   }
@@ -466,48 +469,48 @@ export default function Expand(props) {
                     <div className="car_item_detail">{record.parking_details} </div>
                   </div>
                 </div>
-              </div>
-              <div className="car_info">
-                <div className="car_item">
-                  <div className="car_info_detail1">Car active</div>
-                  <div className="car_info_icon">
-                    {record.active == "Yes" ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                <div className="car_info">
+                  <div className="car_item">
+                    <div className="car_info_detail1">Car active</div>
+                    <div className="car_info_icon">
+                      {record.active == "Yes" ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </div>
                   </div>
-                </div>
-                <div className="car_item">
-                  <div className="car_info_detail1">Verified insurance</div>
-                  <div className="car_info_icon">
-                    {record.verified_insurance == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  <div className="car_item">
+                    <div className="car_info_detail1">Verified insurance</div>
+                    <div className="car_info_icon">
+                      {record.verified_insurance == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </div>
                   </div>
-                </div>
-                <div className="car_item">
-                  <div className="car_info_detail1">Verified registration</div>
-                  <div className="car_info_icon">
-                    {record.verified_registration == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  <div className="car_item">
+                    <div className="car_info_detail1">Verified registration</div>
+                    <div className="car_info_icon">
+                      {record.verified_registration == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </div>
                   </div>
-                </div>
-                <div className="car_item">
-                  <div className="car_info_detail1">Weekend trip</div>
-                  <div className="car_info_icon">
-                    {record.weekend_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  <div className="car_item">
+                    <div className="car_info_detail1">Weekend trip</div>
+                    <div className="car_info_icon">
+                      {record.weekend_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </div>
                   </div>
-                </div>
-                <div className="car_item">
-                  <div className="car_info_detail1">Long term trip</div>
-                  <div className="car_info_icon">
-                    {record.long_term_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  <div className="car_item">
+                    <div className="car_info_detail1">Long term trip</div>
+                    <div className="car_info_icon">
+                      {record.long_term_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </div>
                   </div>
-                </div>
-                <div className="car_item">
-                  <div className="car_info_detail1">Paid advertaising</div>
-                  <div className="car_info_icon">
-                    {record.paid_advertising == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  <div className="car_item">
+                    <div className="car_info_detail1">Paid advertaising</div>
+                    <div className="car_info_icon">
+                      {record.paid_advertising == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                    </div>
                   </div>
-                </div>
-                <div className="car_item">
-                  <div className="car_info_detail1">Reviews</div>
-                  <div className="car_info_icon">
-                    {record.review}
+                  <div className="car_item">
+                    <div className="car_info_detail1">Reviews</div>
+                    <div className="car_info_icon">
+                      {record.review}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -517,8 +520,8 @@ export default function Expand(props) {
                 <button onClick={expandPhotoDiv(record.key)}>{photo_show && selCar === record.key ? <UpOutlined /> : <DownOutlined />}</button>
               </div>
               {photo_show && selCar === record.key && <div className="car_image">{
-                record.key in images && images[record.key].map(item => {
-                  return <div ><img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="350" height="230" /></div>
+                record.key in images && images[record.key].map((item, index) => {
+                  return <div key={index}><img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="330" height="230" /></div>
                 })
               }</div>}
               <div className="photo_info"><h3>Car insurance</h3>
@@ -629,7 +632,7 @@ export default function Expand(props) {
               {/* <button onClick={expendOwnerDiv}>{owner_show ? '+' : '-'}</button> */}
             </div>
             {owner_show && selOwner=== record.key &&
-              <div>
+              <div className="total_owner">
                 <div className="owner">
                   <div className="car_item">
                     <div className="car_insurance_detail">First name</div>
