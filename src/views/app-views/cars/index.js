@@ -31,6 +31,7 @@ const Cars =  () => {
 
 	const reloadButton = () =>{
 		setReloadState(s => !s);
+	
 	}
 	const getTableData=(data)=>{
 		setTableData(data);
