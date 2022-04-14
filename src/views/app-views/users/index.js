@@ -48,7 +48,7 @@ const Users = () => {
 					onSearch={value => setSearchText(value)}
 					style={{ width: 200 }}
 				/>
-				<Select className="mr-2" defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
+				<Select className="mr-2" defaultValue="All" style={{ width: 120 }} onChange={handleChange}>
 					<Option value="">All</Option>
 					<Option value="1">Active</Option>
 					<Option value="0">InActive</Option>

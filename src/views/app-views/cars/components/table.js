@@ -214,7 +214,7 @@ export default function Expand(props) {
           return <div> <CheckCircleOutlined /> </div>
         }
       },
-    }
+    },
   ];
  
   useEffect(() => {
