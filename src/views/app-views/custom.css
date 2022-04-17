@@ -14,6 +14,15 @@
     margin-left:10px;
     margin-bottom: 10px
 }
+.trip_info {
+    width: 490px;
+    min-height: 350px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px
+}
 .car_info_tab{
     display: flex;
 }
