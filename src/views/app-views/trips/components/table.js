@@ -8,12 +8,15 @@ import {
   DownOutlined,
   UpOutlined,
   CheckOutlined,
-  DeleteOutlined   
+  DeleteOutlined ,
+  SnippetsOutlined
 } from '@ant-design/icons';
 import { isEmpty } from "lodash";
 
 
 export default function Expand() {
+    const { confirm } = Modal;
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [ data, setData] = useState([]);
     const [ pagination, setPagination] = useState({});
@@ -28,6 +31,7 @@ export default function Expand() {
     const [images, setImages] = useState([]);
     const [photo_data, setPhotoData] = useState({});
     const [chat, setChat] = useState({});
+    const [status, setStatus] = useState(false);
     const columns = [
         {
           title: "TRIPS ID",
@@ -68,19 +72,94 @@ export default function Expand() {
         { title: "Year", dataIndex: "year", key: "year" },
         {
           title: "Note",
-          key: "operation",
           fixed: "right",
-          width: 100,
-          render: () => <a href="/#">action</a>
+          width: "150px",
+          render: (rowData) => {          
+              const button = (
+                  <>
+                    <Button icon={<SnippetsOutlined />} onClick={showModal(rowData.trips_id)} >Note</Button>
+                    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                    </Modal>
+                  </>
+              );
+              return button;  
+          } 
         },
         {
           title: "Action",
-          key: "",
           fixed: "right",
           width: 100,
-          render: () => <a href="/#">action</a>
+          render: (rowData) => {          
+            const button = (
+                <>
+                  <Button icon={<SnippetsOutlined />} onClick={showChangeStatus(rowData.trips_id)}>STOP/FINISH</Button>
+                </>
+            );
+            return button;  
+        } 
         }
       ];
+
+      const showModal  = (id) => () => {
+        setIsModalVisible(true);
+          console.log(id);
+        // confirm({
+        //   title: "Do you want to change these items?",
+        //   content:
+        //     "Are you sure you want to change insurance verification status of car",
+        //   onOk() {
+        //     fetch({
+        //       url: '/car/insurance/approve/' + id,
+        //       method: 'post',
+        //       headers: {
+        //         'public-request': 'true'
+        //       },
+        //     }).then((resp) => {
+        //       if(carVerifyButton == true) {
+        //         setCarVerifyButton(false);
+        //       } else {
+        //         setCarVerifyButton(true);
+        //       }
+        //     })
+        //   },
+        //   onCancel() { }
+        // });
+      }
+
+      const showChangeStatus = (id) => () => {
+        if(status == true) {
+            setStatus(false);  
+        }
+        confirm({
+          title: "Do you want to change these items?",
+          content:
+            "Are you sure you want to change insurance verification status of car",
+          onOk() {
+            fetch({
+              url: '/trips/stop/' + id,
+              method: 'post',
+              headers: {
+                'public-request': 'true'
+              },
+            }).then((resp) => {
+                
+                setStatus(true);
+            })
+          },
+          onCancel() { }
+        });
+      }
+
+      const handleOk = () => {
+        setIsModalVisible(false);
+      };
+    
+      const handleCancel = () => {
+        setIsModalVisible(false);
+      };
       
     const fetchProducts = (params) => {
         setLoading(true);
@@ -197,7 +276,7 @@ export default function Expand() {
     
         useEffect(() => {
               fetchProducts({ page: 1 });
-          }, []);
+          }, [status]);
 
     const handleTableChange = (pager, filters, sorter) => {
 
@@ -618,8 +697,10 @@ export default function Expand() {
                 <div >
                    {chat && chat.messages && chat.messages.map((item) =>{
                        return <div className="chat_info">
-                           <div>{chat.renter.id}</div>
-                           <div>{chat.renter.first_name + chat.renter.last_name}</div>
+                           <div className ="total_owner">
+                            <div className="bold">{chat.renter.first_name + chat.renter.last_name}</div>
+                            <div className="bold">{chat.renter.id}</div>
+                           </div>
                            <div>{item.created_at}</div>
                            <div>{item.message}</div>
                        </div>
