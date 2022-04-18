@@ -23,8 +23,11 @@ export default function Expand() {
     const [car_show, setCarShow] = useState(false);
     const [selTrip, setSelTrip] = useState();
     const [trip_show, setTripShow] = useState(false);
+    const [selChart, setSelChart] = useState();
+    const [chart_show, setChartShow] = useState(false);
     const [images, setImages] = useState([]);
     const [photo_data, setPhotoData] = useState({});
+    const [chat, setChat] = useState({});
     const columns = [
         {
           title: "TRIPS ID",
@@ -220,9 +223,6 @@ export default function Expand() {
             console.log(resp.trip_images);
             setImages({ ...images, [key]: resp.trip_images });
             setPhotoData(resp.trip_images[0]);
-            if(resp.trip_images == []){
-                
-            }
             // setIdPhoto(resp.profile.id_image_path_small);
             // setDriverPhoto(resp.profile.driver_licence_image_path_small);
             // setProfilePhoto(resp.profile.profile_photo);
@@ -245,6 +245,23 @@ export default function Expand() {
             setSelTrip(key);
         } else
         setTripShow(s => !s);
+    }
+    const expandChatDiv = (key) => () =>{
+        if (selChart !== key) {
+            fetch({
+            url: '/chat/trip/' + key,
+            method: 'get',
+            headers: {
+                'public-request': 'true'
+            },
+            }).then((resp) => {
+                console.log(resp);
+                setChat(resp);
+            setChartShow(true);
+            })
+        setSelChart(key);
+        } else
+        setChartShow(s => !s);
     }
     return (
         <Table
@@ -359,16 +376,16 @@ export default function Expand() {
                         <img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="330" height="230" />
                         <div className="car_item">
                             <div className="car_info_detail">Created at</div>
-                            <div className="car_item_detail">{photo_data.created_at}</div>
+                            <div className="car_item_detail">{item.created_at}</div>
                         </div>
                         <div className="car_item">
                             <div className="car_info_detail">Updated at</div>
-                            <div className="car_item_detail">{photo_data.updated_at}</div>
+                            <div className="car_item_detail">{item.updated_at}</div>
                         </div>
                         <div className="car_item">
                             <div className="car_info_detail">before trip</div>
                             <div className="car_item_detail">
-                            {photo_data.before_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                            {item.before_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
                             </div>
                         </div>
                     </div>
@@ -594,10 +611,20 @@ export default function Expand() {
                     </div>
                    
                 </div>} 
-                {/* <div className="photo_info"><h3>Chat</h3>
-                    <button onClick={expandChatDiv(record.key)}>{photo_show && selPhoto=== record.key ?  <UpOutlined /> : <DownOutlined />}</button>
-               
-                </div> */}
+                <div className="photo_info"><h3>Chat</h3>
+                    <button onClick={expandChatDiv(record.trips_id)}>{chart_show && selChart=== record.trips_id ?  <UpOutlined /> : <DownOutlined />}</button>     
+                </div>
+                {chart_show && selChart=== record.trips_id && 
+                <div >
+                   {chat && chat.messages && chat.messages.map((item) =>{
+                       return <div className="chat_info">
+                           <div>{chat.renter.id}</div>
+                           <div>{chat.renter.first_name + chat.renter.last_name}</div>
+                           <div>{item.created_at}</div>
+                           <div>{item.message}</div>
+                       </div>
+                   })}
+                </div>} 
             </div>,
           }}
           dataSource={data}

@@ -149,3 +149,13 @@
     display: flex;
     justify-content: space-between;
 }
+
+.chat_info {
+    width: 100%;
+    min-height: 100px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px
+}
