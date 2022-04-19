@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button  } from 'antd';
+import { Table, Modal, Button } from 'antd';
 import fetch from 'auth/FetchInterceptor';
 import '../../custom.css';
-import { 
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  DownOutlined,
-  UpOutlined,
-  CheckOutlined,
-  DeleteOutlined ,
-  SnippetsOutlined
+import {
+    CheckCircleOutlined,
+    CloseCircleOutlined,
+    DownOutlined,
+    UpOutlined,
+    CheckOutlined,
+    DeleteOutlined,
+    SnippetsOutlined
 } from '@ant-design/icons';
 import { isEmpty } from "lodash";
 
@@ -17,9 +17,10 @@ import { isEmpty } from "lodash";
 export default function Expand() {
     const { confirm } = Modal;
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isChangeStatusModalVisible, setIsChangeStatusModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [ data, setData] = useState([]);
-    const [ pagination, setPagination] = useState({});
+    const [data, setData] = useState([]);
+    const [pagination, setPagination] = useState({});
     const [selPhoto, setSelPhoto] = useState();
     const [photo_show, setPhotoShow] = useState(false);
     const [selCar, setSelCar] = useState();
@@ -32,20 +33,21 @@ export default function Expand() {
     const [photo_data, setPhotoData] = useState({});
     const [chat, setChat] = useState({});
     const [status, setStatus] = useState(false);
+    const [rowDataid, setRowDataId] = useState();
     const columns = [
         {
-          title: "TRIPS ID",
-          width: 100,
-          dataIndex: "trips_id",
-          key: "trips_id",
-          fixed: "left"
+            title: "TRIPS ID",
+            width: 100,
+            dataIndex: "trips_id",
+            key: "trips_id",
+            fixed: "left"
         },
         {
-          title: "Booking Date",
-          width: 100,
-          dataIndex: "booking_date",
-          key: "booking_date",
-          fixed: "left"
+            title: "Booking Date",
+            width: 100,
+            dataIndex: "booking_date",
+            key: "booking_date",
+            fixed: "left"
         },
         { title: "Start date", dataIndex: "start_date", key: "start_date" },
         { title: "End date", dataIndex: "end_date", key: "end_date" },
@@ -71,41 +73,41 @@ export default function Expand() {
         { title: "Model", dataIndex: "model", key: "model" },
         { title: "Year", dataIndex: "year", key: "year" },
         {
-          title: "Note",
-          fixed: "right",
-          width: "150px",
-          render: (rowData) => {          
-              const button = (
-                  <>
-                    <Button icon={<SnippetsOutlined />} onClick={showModal(rowData.trips_id)} >Note</Button>
-                    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                    </Modal>
-                  </>
-              );
-              return button;  
-          } 
+            title: "Note",
+            fixed: "right",
+            width: "150px",
+            render: (rowData) => {
+                const button = (
+                    <>
+                        <Button icon={<SnippetsOutlined />} onClick={showModal(rowData.trips_id)} >Note</Button>
+                        <Modal title="Testing Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                        </Modal>
+                    </>
+                );
+                return button;
+            }
         },
         {
-          title: "Action",
-          fixed: "right",
-          width: 100,
-          render: (rowData) => {          
-            const button = (
-                <>
-                  <Button icon={<SnippetsOutlined />} onClick={showChangeStatus(rowData.trips_id)}>STOP/FINISH</Button>
-                </>
-            );
-            return button;  
-        } 
+            title: "Action",
+            fixed: "right",
+            width: 100,
+            render: (rowData) => {
+                const button = (
+                    <>
+                        <Button icon={<SnippetsOutlined />} onClick={showChangeStatus(rowData.trips_id)}>STOP/FINISH</Button>
+                    </>
+                );
+                return button;
+            }
         }
-      ];
+    ];
 
-      const showModal  = (id) => () => {
+    const showModal = (id) => () => {
         setIsModalVisible(true);
-          console.log(id);
+        console.log(id);
         // confirm({
         //   title: "Do you want to change these items?",
         //   content:
@@ -127,60 +129,116 @@ export default function Expand() {
         //   },
         //   onCancel() { }
         // });
-      }
+    }
 
-      const showChangeStatus = (id) => () => {
-        if(status == true) {
-            setStatus(false);  
+    const showChangeStatus = (id) => () => {
+        setRowDataId(id);
+        console.log(id);
+        if (status == true) {
+            setStatus(false);
         }
-        confirm({
-          title: "Do you want to change these items?",
-          content:
-            "Are you sure you want to change insurance verification status of car",
-          onOk() {
-            fetch({
-              url: '/trips/stop/' + id,
-              method: 'post',
-              headers: {
-                'public-request': 'true'
-              },
-            }).then((resp) => {
-                
-                setStatus(true);
-            })
-          },
-          onCancel() { }
-        });
-      }
+        setIsChangeStatusModalVisible(true);
 
-      const handleOk = () => {
+        // confirm({
+        //   title: "Do you want to change these items?",
+        //   content:
+        //     "Are you sure you want to change insurance verification status of car",
+        //   onOk() {
+        //     fetch({
+        //       url: '/trips/stop/' + id,
+        //       method: 'post',
+        //       headers: {
+        //         'public-request': 'true'
+        //       },
+        //     }).then((resp) => {
+
+        //         setStatus(true);
+        //     })
+        //   },
+
+        //   onCancel() { }
+        // });
+    }
+
+    const handleOk = () => {
         setIsModalVisible(false);
-      };
-    
-      const handleCancel = () => {
+    };
+
+    const handleCancel = () => {
         setIsModalVisible(false);
-      };
-      
+    };
+
+    const handleFinished = (id) => () => {
+        fetch({
+            url: '/trips/stop/' + id,
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+        }).then((resp) => {
+            setIsChangeStatusModalVisible(false);
+            setStatus(true);
+        })
+        
+    };
+
+    const handleWaiting = (id) => () => {
+        fetch({
+            url: '/trips/waiting/' + id,
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+        }).then((resp) => {
+            setIsChangeStatusModalVisible(false);
+            setStatus(true);
+        })
+    };
+    const handleStarted  = (id) => () => {
+        fetch({
+            url: '/trips/start/' + id,
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+        }).then((resp) => {
+            setIsChangeStatusModalVisible(false);
+            setStatus(true);
+        })
+    };
+    const handleCanceled  = (id) => () => {
+        fetch({
+            url: '/trips/cancel/' + id,
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+        }).then((resp) => {
+            setIsChangeStatusModalVisible(false);
+            setStatus(true);
+        })
+    };
+
     const fetchProducts = (params) => {
         setLoading(true);
-          fetch({
+        fetch({
             url: '/trips',
             method: 'get',
             headers: {
-              'public-request': 'true'
+                'public-request': 'true'
             },
             params
-          }).then((resp) => {
+        }).then((resp) => {
             console.log(resp.data.trips);
             setLoading(false);
             var data = [];
             var new_data = {}
             setPagination({ ...pagination, total: resp.meta.total });
-            resp.data.trips.map((item, key)=> {
+            resp.data.trips.map((item, key) => {
                 console.log(item, key);
                 new_data = {
                     key: key,
-                    trips_id : item.id,
+                    trips_id: item.id,
                     booking_date: item.created_at,
                     start_date: item.start_date,
                     created_at: item.created_at,
@@ -267,453 +325,468 @@ export default function Expand() {
                     trip_bill_start_date: item.trip_bill.trip_start_date,
                     trip_bill_end_date: item.trip_bill.trip_end_date,
 
-                 }
-                 data.push(new_data);
+                }
+                data.push(new_data);
             })
             setData(data);
-          })
-        }
-    
-        useEffect(() => {
-              fetchProducts({ page: 1 });
-          }, [status]);
+        })
+    }
+
+    useEffect(() => {
+        fetchProducts({ page: 1 });
+    }, [status]);
 
     const handleTableChange = (pager, filters, sorter) => {
 
         setPagination({ ...pagination, current: pager.current });
         fetchProducts({
-        page: pager.current,
-        // results: pager.pageSize,
-        // dates: props.startDate + "," + props.endDate,
-        // search: props.searchText,
-        // active: props.selectActive
+            page: pager.current,
+            // results: pager.pageSize,
+            // dates: props.startDate + "," + props.endDate,
+            // search: props.searchText,
+            // active: props.selectActive
         });
     };
 
-    const expandPhotoDiv = (key) => () =>{
+    const expandPhotoDiv = (key) => () => {
         if (selPhoto !== key) {
             fetch({
-            url: '/trip/' + key,
-            method: 'get',
-            headers: {
-                'public-request': 'true'
-            },
+                url: '/trip/' + key,
+                method: 'get',
+                headers: {
+                    'public-request': 'true'
+                },
             }).then((resp) => {
-            console.log(resp.trip_images);
-            setImages({ ...images, [key]: resp.trip_images });
-            setPhotoData(resp.trip_images[0]);
-            // setIdPhoto(resp.profile.id_image_path_small);
-            // setDriverPhoto(resp.profile.driver_licence_image_path_small);
-            // setProfilePhoto(resp.profile.profile_photo);
-            setPhotoShow(true);
+                console.log(resp.trip_images);
+                setImages({ ...images, [key]: resp.trip_images });
+                setPhotoData(resp.trip_images[0]);
+                // setIdPhoto(resp.profile.id_image_path_small);
+                // setDriverPhoto(resp.profile.driver_licence_image_path_small);
+                // setProfilePhoto(resp.profile.profile_photo);
+                setPhotoShow(true);
             })
-        setSelPhoto(key);
+            setSelPhoto(key);
         } else
-        setPhotoShow(s => !s);
+            setPhotoShow(s => !s);
     }
-    const expandCarsDiv = (key) => () =>{
+    const expandCarsDiv = (key) => () => {
         if (selCar !== key) {
             setCarShow(true);
             setSelCar(key);
         } else
-        setCarShow(s => !s);
+            setCarShow(s => !s);
     }
-    const expandTripBillsDiv = (key) => () =>{
+    const expandTripBillsDiv = (key) => () => {
         if (selTrip !== key) {
             setTripShow(true);
             setSelTrip(key);
         } else
-        setTripShow(s => !s);
+            setTripShow(s => !s);
     }
-    const expandChatDiv = (key) => () =>{
+    const expandChatDiv = (key) => () => {
         if (selChart !== key) {
             fetch({
-            url: '/chat/trip/' + key,
-            method: 'get',
-            headers: {
-                'public-request': 'true'
-            },
+                url: '/chat/trip/' + key,
+                method: 'get',
+                headers: {
+                    'public-request': 'true'
+                },
             }).then((resp) => {
                 console.log(resp);
                 setChat(resp);
-            setChartShow(true);
+                setChartShow(true);
             })
-        setSelChart(key);
+            setSelChart(key);
         } else
-        setChartShow(s => !s);
+            setChartShow(s => !s);
     }
     return (
-        <Table
-          columns={columns}
-          expandable={{
-            expandedRowRender: record => 
-            <div style={{ margin: 0 }}>
-                <div className="car_info_tab">
-                    <div className="trip_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">Owner Name</div>
-                            <div className="car_item_detail">{record.owner_fullname}</div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Owner Email</div>
-                            <div className="car_item_detail">{record.owner_email} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Owner Country Code</div>
-                            <div className="car_item_detail">{record.owner_country_code} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Owner Phone</div>
-                            <div className="car_item_detail">{record.owner_phone} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Start date</div>
-                            <div className="car_item_detail">{record.start_date} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">End date</div>
-                            <div className="car_item_detail">{record.end_date} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Created at</div>
-                            <div className="car_item_detail">{record.created_at} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Updated at</div>
-                            <div className="car_item_detail">{record.updated_at} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Notice time</div>
-                            <div className="car_item_detail">{record.notice_time} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Pickup location</div>
-                            <div className="car_item_detail">{record.pickup_location} </div>
-                        </div>
-                    </div>
-                    <div className="trip_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">Renter Name</div>
-                            <div className="car_item_detail">{record.renter_full_name} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Renter Email</div>
-                            <div className="car_item_detail">{record.renter_email} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Renter Country Code</div>
-                            <div className="car_item_detail">{record.renter_country_code} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Renter Phone</div>
-                            <div className="car_item_detail">{record.renter_phone} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Renter confirm trip</div>
-                            <div className="car_item_detail">{record.renter_confirm_trip} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Owner confirm trip</div>
-                            <div className="car_item_detail">{record.owner_confirm_trip} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Renter confirm trip update</div>
-                            <div className="car_item_detail">{record.renter_confirm_update} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Owner confirm trip update</div>
-                            <div className="car_item_detail">{record.owner_confirm_update} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Booked instantly:</div>
-                            <div className="car_item_detail">{record.booked_instantly} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Delivery on airporte</div>
-                            <div className="car_item_detail">{record.delivery_on_airport} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Delivery on car location</div>
-                            <div className="car_item_detail">{record.delivery_on_car_location} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Delivery on renter location</div>
-                            <div className="car_item_detail">{record.delivery_on_renter_location} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip modified</div>
-                            <div className="car_item_detail">{record.trip_modified} </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="photo_info"><h3>Photos</h3>
-                    <button onClick={expandPhotoDiv(record.trips_id)}>{photo_show && selPhoto=== record.trips_id ?  <UpOutlined /> : <DownOutlined />}</button>      
-                </div>
-                {photo_show && selPhoto=== record.trips_id && <div className="car_image">{
-                    record.trips_id in images && images[record.trips_id].map((item, index) => {
-                    return <div key={index} className="trip_info">
-                        <img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="330" height="230" />
-                        <div className="car_item">
-                            <div className="car_info_detail">Created at</div>
-                            <div className="car_item_detail">{item.created_at}</div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Updated at</div>
-                            <div className="car_item_detail">{item.updated_at}</div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">before trip</div>
-                            <div className="car_item_detail">
-                            {item.before_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+        <>
+            <Table
+                columns={columns}
+                expandable={{
+                    expandedRowRender: record =>
+                        <div style={{ margin: 0 }}>
+                            <div className="car_info_tab">
+                                <div className="trip_info">
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Owner Name</div>
+                                        <div className="car_item_detail">{record.owner_fullname}</div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Owner Email</div>
+                                        <div className="car_item_detail">{record.owner_email} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Owner Country Code</div>
+                                        <div className="car_item_detail">{record.owner_country_code} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Owner Phone</div>
+                                        <div className="car_item_detail">{record.owner_phone} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Start date</div>
+                                        <div className="car_item_detail">{record.start_date} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">End date</div>
+                                        <div className="car_item_detail">{record.end_date} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Created at</div>
+                                        <div className="car_item_detail">{record.created_at} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Updated at</div>
+                                        <div className="car_item_detail">{record.updated_at} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Notice time</div>
+                                        <div className="car_item_detail">{record.notice_time} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Pickup location</div>
+                                        <div className="car_item_detail">{record.pickup_location} </div>
+                                    </div>
+                                </div>
+                                <div className="trip_info">
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Renter Name</div>
+                                        <div className="car_item_detail">{record.renter_full_name} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Renter Email</div>
+                                        <div className="car_item_detail">{record.renter_email} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Renter Country Code</div>
+                                        <div className="car_item_detail">{record.renter_country_code} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Renter Phone</div>
+                                        <div className="car_item_detail">{record.renter_phone} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Renter confirm trip</div>
+                                        <div className="car_item_detail">{record.renter_confirm_trip} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Owner confirm trip</div>
+                                        <div className="car_item_detail">{record.owner_confirm_trip} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Renter confirm trip update</div>
+                                        <div className="car_item_detail">{record.renter_confirm_update} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Owner confirm trip update</div>
+                                        <div className="car_item_detail">{record.owner_confirm_update} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Booked instantly:</div>
+                                        <div className="car_item_detail">{record.booked_instantly} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Delivery on airporte</div>
+                                        <div className="car_item_detail">{record.delivery_on_airport} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Delivery on car location</div>
+                                        <div className="car_item_detail">{record.delivery_on_car_location} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Delivery on renter location</div>
+                                        <div className="car_item_detail">{record.delivery_on_renter_location} </div>
+                                    </div>
+                                    <div className="car_item">
+                                        <div className="car_info_detail">Trip modified</div>
+                                        <div className="car_item_detail">{record.trip_modified} </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                            
-                    })
-                }</div>}
-                <div className="photo_info"><h3>Cars</h3>
-                    <button onClick={expandCarsDiv(record.trips_id)}>{car_show && selCar=== record.trips_id ?  <UpOutlined /> : <DownOutlined />}</button>
-                </div>
-                {car_show && selCar === record.trips_id && 
-                <div className="car_info_tab">
-                    <div className="car_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">Style</div>
-                            <div className="car_item_detail">{record.car_style}</div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Odometer</div>
-                            <div className="car_item_detail">{record.car_odometer} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Value</div>
-                            <div className="car_item_detail">{record.car_value} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Created at</div>
-                            <div className="car_item_detail">{record.car_created_at} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Updated at</div>
-                            <div className="car_item_detail">{record.car_updated_at} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Deposit</div>
-                            <div className="car_item_detail">{record.car_deposit} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Star</div>
-                            <div className="car_item_detail">{record.car_star} </div>
-                        </div>
-                        
-                    </div>
-                    <div className="car_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">Short trip</div>
-                            <div className="car_item_detail">{record.car_short_trip} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Long trip</div>
-                            <div className="car_item_detail">{record.car_long_trip} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Car notice</div>
-                            <div className="car_item_detail">{record.car_notice} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Guest location notice</div>
-                            <div className="car_item_detail">{record.car_guest_location_notice} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Car location notice</div>
-                            <div className="car_item_detail">{record.car_car_location_notice} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Airport notice</div>
-                            <div className="car_item_detail">{record.car_airport_notice} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Key handoff</div>
-                            <div className="car_item_detail">{record.car_key_hand_off} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Paking detials</div>
-                            <div className="car_item_detail">{record.car_parking_detail} </div>
-                        </div>                      
-                    </div>
-                    <div className="car_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">ID</div>
-                            <div className="car_item_detail">{record.car_id} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Car active</div>
-                            <div className="car_item_detail">
-                            {record.car_active == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                            <div className="photo_info"><h3>Photos</h3>
+                                <button onClick={expandPhotoDiv(record.trips_id)}>{photo_show && selPhoto === record.trips_id ? <UpOutlined /> : <DownOutlined />}</button>
                             </div>
-                            {/* <div className="car_item_detail">{record.car_active} </div> */}
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Verified insurance</div>
-                            <div className="car_item_detail">
-                            {record.car_verify_insurance == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                            {photo_show && selPhoto === record.trips_id && <div className="car_image">{
+                                record.trips_id in images && images[record.trips_id].map((item, index) => {
+                                    return <div key={index} className="trip_info">
+                                        <img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="330" height="230" />
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Created at</div>
+                                            <div className="car_item_detail">{item.created_at}</div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Updated at</div>
+                                            <div className="car_item_detail">{item.updated_at}</div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">before trip</div>
+                                            <div className="car_item_detail">
+                                                {item.before_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                })
+                            }</div>}
+                            <div className="photo_info"><h3>Cars</h3>
+                                <button onClick={expandCarsDiv(record.trips_id)}>{car_show && selCar === record.trips_id ? <UpOutlined /> : <DownOutlined />}</button>
                             </div>
-                            {/* <div className="car_item_detail">{record.car_verify_insurance} </div> */}
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Verified registraion</div>
-                            <div className="car_item_detail">
-                            {record.car_verify_registrion == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                            {car_show && selCar === record.trips_id &&
+                                <div className="car_info_tab">
+                                    <div className="car_info">
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Style</div>
+                                            <div className="car_item_detail">{record.car_style}</div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Odometer</div>
+                                            <div className="car_item_detail">{record.car_odometer} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Value</div>
+                                            <div className="car_item_detail">{record.car_value} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Created at</div>
+                                            <div className="car_item_detail">{record.car_created_at} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Updated at</div>
+                                            <div className="car_item_detail">{record.car_updated_at} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Deposit</div>
+                                            <div className="car_item_detail">{record.car_deposit} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Star</div>
+                                            <div className="car_item_detail">{record.car_star} </div>
+                                        </div>
+
+                                    </div>
+                                    <div className="car_info">
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Short trip</div>
+                                            <div className="car_item_detail">{record.car_short_trip} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Long trip</div>
+                                            <div className="car_item_detail">{record.car_long_trip} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Car notice</div>
+                                            <div className="car_item_detail">{record.car_notice} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Guest location notice</div>
+                                            <div className="car_item_detail">{record.car_guest_location_notice} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Car location notice</div>
+                                            <div className="car_item_detail">{record.car_car_location_notice} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Airport notice</div>
+                                            <div className="car_item_detail">{record.car_airport_notice} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Key handoff</div>
+                                            <div className="car_item_detail">{record.car_key_hand_off} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Paking detials</div>
+                                            <div className="car_item_detail">{record.car_parking_detail} </div>
+                                        </div>
+                                    </div>
+                                    <div className="car_info">
+                                        <div className="car_item">
+                                            <div className="car_info_detail">ID</div>
+                                            <div className="car_item_detail">{record.car_id} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Car active</div>
+                                            <div className="car_item_detail">
+                                                {record.car_active == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                            {/* <div className="car_item_detail">{record.car_active} </div> */}
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Verified insurance</div>
+                                            <div className="car_item_detail">
+                                                {record.car_verify_insurance == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                            {/* <div className="car_item_detail">{record.car_verify_insurance} </div> */}
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Verified registraion</div>
+                                            <div className="car_item_detail">
+                                                {record.car_verify_registrion == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                            {/* <div className="car_item_detail">{record.car_verify_registrion} </div> */}
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Weekend trip</div>
+                                            <div className="car_item_detail">
+                                                {record.car_weekend_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                            {/* <div className="car_item_detail">{record.car_weekend_trip} </div> */}
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Long term trip</div>
+                                            <div className="car_item_detail">
+                                                {record.car_long_term_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                            {/* <div className="car_item_detail">{record.car_long_term_trip} </div> */}
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Paid advertaising</div>
+                                            <div className="car_item_detail">
+                                                {record.car_paid_advertising == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                                            </div>
+                                            {/* <div className="car_item_detail">{record.car_paid_advertising} </div> */}
+                                        </div>
+                                    </div>
+                                </div>}
+                            <div className="photo_info"><h3>Trip bills</h3>
+                                <button onClick={expandTripBillsDiv(record.key)}>{trip_show && selTrip === record.key ? <UpOutlined /> : <DownOutlined />}</button>
                             </div>
-                            {/* <div className="car_item_detail">{record.car_verify_registrion} </div> */}
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Weekend trip</div>
-                            <div className="car_item_detail">
-                            {record.car_weekend_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                            {trip_show && selTrip === record.key &&
+                                <div className="car_info_tab">
+                                    <div className="trip_info">
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Average price</div>
+                                            <div className="car_item_detail">{record.average_price}</div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Delivery fee</div>
+                                            <div className="car_item_detail">{record.delivery_fee} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Deposit</div>
+                                            <div className="car_item_detail">{record.trip_doposit} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Monthly discount</div>
+                                            <div className="car_item_detail">{record.monthly_discount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Weekly dicount</div>
+                                            <div className="car_item_detail">{record.weekly_discount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Discount amount</div>
+                                            <div className="car_item_detail">{record.discount_amount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Promo code</div>
+                                            <div className="car_item_detail">{record.promo_code} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Promo code discount</div>
+                                            <div className="car_item_detail">{record.promo_code_discount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Promo discount</div>
+                                            <div className="car_item_detail">{record.promo_discount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Service fee</div>
+                                            <div className="car_item_detail">{record.service_fee} </div>
+                                        </div>
+
+                                    </div>
+                                    <div className="trip_info">
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip paid</div>
+                                            <div className="car_item_detail">{record.trip_paid} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">ESAR earining</div>
+                                            <div className="car_item_detail">{record.esar_earning} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Qwner earining</div>
+                                            <div className="car_item_detail">{record.owner_earning} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Price with discount</div>
+                                            <div className="car_item_detail">{record.price_with_discount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Price with promo discount</div>
+                                            <div className="car_item_detail">{record.price_with_promo_discount} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Transation reference</div>
+                                            <div className="car_item_detail">{record.tran_ref} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip bill status</div>
+                                            <div className="car_item_detail">{record.trip_bill_status} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip days</div>
+                                            <div className="car_item_detail">{record.trip_days} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip price</div>
+                                            <div className="car_item_detail">{record.trip_price} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip total</div>
+                                            <div className="car_item_detail">{record.trip_total} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip bill start date</div>
+                                            <div className="car_item_detail">{record.trip_bill_start_date} </div>
+                                        </div>
+                                        <div className="car_item">
+                                            <div className="car_info_detail">Trip bill end date</div>
+                                            <div className="car_item_detail">{record.trip_bill_end_date} </div>
+                                        </div>
+                                    </div>
+
+                                </div>}
+                            <div className="photo_info"><h3>Chat</h3>
+                                <button onClick={expandChatDiv(record.trips_id)}>{chart_show && selChart === record.trips_id ? <UpOutlined /> : <DownOutlined />}</button>
                             </div>
-                            {/* <div className="car_item_detail">{record.car_weekend_trip} </div> */}
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Long term trip</div>
-                            <div className="car_item_detail">
-                            {record.car_long_term_trip == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-                            </div>
-                            {/* <div className="car_item_detail">{record.car_long_term_trip} </div> */}
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Paid advertaising</div>
-                            <div className="car_item_detail">
-                            {record.car_paid_advertising == 1 ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-                            </div>
-                            {/* <div className="car_item_detail">{record.car_paid_advertising} </div> */}
-                        </div>                        
-                    </div>
-                </div>} 
-                <div className="photo_info"><h3>Trip bills</h3>
-                    <button onClick={expandTripBillsDiv(record.key)}>{trip_show && selTrip=== record.key ?  <UpOutlined /> : <DownOutlined />}</button>             
-                </div>
-                {trip_show && selTrip=== record.key && 
-                <div className="car_info_tab">
-                    <div className="trip_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">Average price</div>
-                            <div className="car_item_detail">{record.average_price}</div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Delivery fee</div>
-                            <div className="car_item_detail">{record.delivery_fee} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Deposit</div>
-                            <div className="car_item_detail">{record.trip_doposit} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Monthly discount</div>
-                            <div className="car_item_detail">{record.monthly_discount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Weekly dicount</div>
-                            <div className="car_item_detail">{record.weekly_discount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Discount amount</div>
-                            <div className="car_item_detail">{record.discount_amount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Promo code</div>
-                            <div className="car_item_detail">{record.promo_code} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Promo code discount</div>
-                            <div className="car_item_detail">{record.promo_code_discount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Promo discount</div>
-                            <div className="car_item_detail">{record.promo_discount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Service fee</div>
-                            <div className="car_item_detail">{record.service_fee} </div>
-                        </div>
-                        
-                    </div>
-                    <div className="trip_info">
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip paid</div>
-                            <div className="car_item_detail">{record.trip_paid} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">ESAR earining</div>
-                            <div className="car_item_detail">{record.esar_earning} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Qwner earining</div>
-                            <div className="car_item_detail">{record.owner_earning} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Price with discount</div>
-                            <div className="car_item_detail">{record.price_with_discount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Price with promo discount</div>
-                            <div className="car_item_detail">{record.price_with_promo_discount} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Transation reference</div>
-                            <div className="car_item_detail">{record.tran_ref} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip bill status</div>
-                            <div className="car_item_detail">{record.trip_bill_status} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip days</div>
-                            <div className="car_item_detail">{record.trip_days} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip price</div>
-                            <div className="car_item_detail">{record.trip_price} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip total</div>
-                            <div className="car_item_detail">{record.trip_total} </div>
-                        </div>
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip bill start date</div>
-                            <div className="car_item_detail">{record.trip_bill_start_date} </div>
-                        </div>     
-                        <div className="car_item">
-                            <div className="car_info_detail">Trip bill end date</div>
-                            <div className="car_item_detail">{record.trip_bill_end_date} </div>
-                        </div>                 
-                    </div>
-                   
-                </div>} 
-                <div className="photo_info"><h3>Chat</h3>
-                    <button onClick={expandChatDiv(record.trips_id)}>{chart_show && selChart=== record.trips_id ?  <UpOutlined /> : <DownOutlined />}</button>     
-                </div>
-                {chart_show && selChart=== record.trips_id && 
-                <div >
-                   {chat && chat.messages && chat.messages.map((item) =>{
-                       return <div className="chat_info">
-                           <div className ="total_owner">
-                            <div className="bold">{chat.renter.first_name + chat.renter.last_name}</div>
-                            <div className="bold">{chat.renter.id}</div>
-                           </div>
-                           <div>{item.created_at}</div>
-                           <div>{item.message}</div>
-                       </div>
-                   })}
-                </div>} 
-            </div>,
-          }}
-          dataSource={data}
-          pagination={pagination}
-          loading={loading}
-          scroll={{ x: 2500 }}
-          onChange={handleTableChange}
-        />
-      );
+                            {chart_show && selChart === record.trips_id &&
+                                <div >
+                                    {chat && chat.messages && chat.messages.map((item) => {
+                                        return <div className="chat_info">
+                                            <div className="total_owner">
+                                                <div className="bold">{chat.renter.first_name + chat.renter.last_name}</div>
+                                                <div className="bold">{chat.renter.id}</div>
+                                            </div>
+                                            <div>{item.created_at}</div>
+                                            <div>{item.message}</div>
+                                        </div>
+                                    })}
+                                </div>}
+                        </div>,
+                }}
+                dataSource={data}
+                pagination={pagination}
+                loading={loading}
+                scroll={{ x: 2500 }}
+                onChange={handleTableChange}
+            />
+            <Modal title="Do you want to change these items?" visible={isChangeStatusModalVisible}
+                footer={[
+                    <Button key="1" onClick={handleFinished(rowDataid)}>FINISHED</Button>,
+                    <Button key="2" onClick={handleWaiting(rowDataid)}>WAITING</Button>,
+                    <Button key="3" onClick={handleCanceled(rowDataid)}>CANCELED</Button>,
+                    <Button key="4" onClick={handleStarted(rowDataid)}>STARTED</Button>,
+                ]}
+            >
+
+                <p>Are you sure you want to change status of trip?</p>
+
+            </Modal>
+
+        </>
+    );
 }
 
