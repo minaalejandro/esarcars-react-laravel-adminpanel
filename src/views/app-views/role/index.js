@@ -2,40 +2,20 @@ import React, {useEffect, useState}from 'react';
 import { Button, DatePicker, Input } from "antd";
 import { DownloadOutlined } from '@ant-design/icons';
 
-// import Table from './components/table';
+import Table from './components/table';
 import '../custom.css';
-
-const { RangePicker } = DatePicker;
-const { Search } = Input;
 
 const Role = () => {
 	return (
 		<React.Fragment>
-			<div className='CarBtn'>
-				<Button >CARS LISTING</Button>
-				<RangePicker
-					// onChange={date => setSelectDate(date)}
-				/>
-				<Search
-					placeholder="input search text"
-					// onSearch={value => setSearchText(value)}
-					style={{ width: 200 }}
-				/>
+			
+			<div className='RoleBtn'>
+				<h1>ROLE MANAGEMENT</h1>
+				<Button type="primary">ADD ROLE</Button>
 			</div>
-			<div className='DownBtn'>
-				<Button type="default"   icon={<DownloadOutlined />}  >
-					CSV
-				</Button>
-				<Button type="default"  icon={<DownloadOutlined /> }>
-					EXCEL
-				</Button>
-				<Button type="default"  icon={<DownloadOutlined />}>
-					PDF
-				</Button>
-			</div>
-			{/* <div>
+			<div>
 				<Table/>
-			</div> */}
+			</div>
 
 		</React.Fragment>
 	)

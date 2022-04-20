@@ -166,3 +166,21 @@
 .bold {
     font-weight: bold;
 }
+
+.earing_detail {
+    display: flex;
+}
+.earing_detail_body{
+    width: 1010px;
+    outline: 0.5px ridge rgba(209, 209, 209, 0.6);
+    border-radius: 0.3rem;
+    padding: 5px;
+    margin-left:10px;
+    margin-bottom: 10px 
+}
+
+.RoleBtn {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
