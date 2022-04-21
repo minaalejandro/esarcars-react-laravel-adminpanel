@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Modal, Form, Input, Button, Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch, } from "antd";
+import { Table, Modal, Form, Input, Select} from "antd";
 import fetch from 'auth/FetchInterceptor';
 import {
     EditOutlined,
     DeleteOutlined
 } from '@ant-design/icons';
-import { ComposableMap } from "react-simple-maps";
 
 
 
