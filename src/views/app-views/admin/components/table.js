@@ -1,62 +1,172 @@
-import React, { Component } from "react";
-import { Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Modal, Form, Input, Button, Radio,
+    Select,
+    Cascader,
+    DatePicker,
+    InputNumber,
+    TreeSelect,
+    Switch, } from "antd";
+import fetch from 'auth/FetchInterceptor';
+import {
+    EditOutlined,
+    DeleteOutlined
+} from '@ant-design/icons';
+import { ComposableMap } from "react-simple-maps";
 
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email"
-  },
-  {
-    title: "Roles",
-    dataIndex: "roles;",
-    key: "roles"
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (text, record) => (
-      <span>
-       
-        <a href="/#">Delete</a>
-      </span>
+
+
+export default function Expand(props) {
+    const [data, setData] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("")
+    const [roles, setRoles] = useState("");
+    const [id, setId] = useState();
+    const [loading, setLoading] = useState(false);
+    const [reloadState, setReloadState] = useState(true);
+    const columns = [
+        {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email"
+        },
+        {
+            title: "Roles",
+            dataIndex: "roles",
+            key: "roles"
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (rowData) => (
+                <>
+                    <div style={{ display: "flex" }}>
+                        <div style={{ padding: "10px" }}><EditOutlined onClick={handleEdit(rowData.key, rowData.name, rowData.email, rowData.roles)} /></div>
+                        <div style={{ padding: "10px" }}><DeleteOutlined onClick={handleDelete(rowData.key)} /></div>
+                    </div>
+                </>
+            )
+        }
+    ];
+    const handleEdit = (id, name, email,roles ) => () => {
+        setId(id);
+        setName(name);
+        setEmail(email);
+        setPassword("Password");
+        setRoles(roles);
+        setIsModalVisible(true)
+        
+    }
+    const handleDelete = (id) => () => {
+        fetch({
+            url: '/deleteAdmin/' + id,
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+        }).then((resp) => {
+            setReloadState(s => !s);
+           
+        })
+    }
+    const handleOk = () => {
+        let new_data = {
+            name: name,
+            email: email,
+            password: password,
+            role: roles
+        }
+
+        fetch({
+            url: '/editAdmin/' +id,
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+            
+        }).then((resp) => {
+        })
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+    const fetchProducts = () => {
+        setLoading(true);
+        fetch({
+            url: '/getAdmin',
+            method: 'get',
+            headers: {
+                'public-request': 'true'
+            },
+        }).then((resp) => {
+            setLoading(false);
+            let data = [];
+            let new_data = {};
+            resp.data.map(item => {
+                new_data = {
+                    key: item.id,
+                    name: item.name,
+                    email: item.email,
+                    roles: item.role.role_name.name,
+                }
+                data.push(new_data);
+            })
+            setData(data);
+        })
+    }
+    useEffect(() => {
+        fetchProducts();
+    }, [props.reloadState, reloadState]);
+
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    }
+    const handleEmailChange = (e) => {
+        setEmail( e.target.value);
+    }
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    }
+    return (
+        <>
+            <Table columns={columns} dataSource={data}  loading={loading} />
+            <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <Form
+                    labelCol={{
+                        span: 4,
+                    }}
+                    wrapperCol={{
+                        span: 14,
+                    }}
+                    layout="horizontal"
+                >
+                    <Form.Item label="Name">
+                        <Input value={name} onChange={handleNameChange}/>
+                    </Form.Item>
+                    <Form.Item label="Email" >
+                        <Input value={email} onChange={handleEmailChange}/>
+                    </Form.Item>
+                    <Form.Item label="Password" >
+                        <Input type="password" value={password} onChange={handlePasswordChange} />
+                    </Form.Item>
+                    <Form.Item label="Select Role">
+                        <Select>
+                            <Select.Option value={roles}>{roles}</Select.Option>
+                        </Select>
+                    </Form.Item>
+                </Form>
+
+            </Modal>
+        </>
     )
-  }
-];
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"]
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"]
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"]
-  }
-];
-
-export default function Expand(props){
-
-    return <Table columns={columns} dataSource={data} />;
-  
 }
 
 
