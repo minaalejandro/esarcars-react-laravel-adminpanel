@@ -90,7 +90,7 @@ const Admin = () => {
 				<Button type="primary" onClick={handleAddAdmin}>ADD ADMIN</Button>
 			</div>
 			<div>
-				<Table  reloadState={reloadState}/>
+				<Table  reloadState={reloadState} roles={roles}/>
 			</div>
 			<Modal title="Add Admin" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form

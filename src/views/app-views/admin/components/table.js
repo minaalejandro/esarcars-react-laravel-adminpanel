@@ -16,6 +16,7 @@ import { ComposableMap } from "react-simple-maps";
 
 
 export default function Expand(props) {
+    const { confirm } = Modal;
     const [data, setData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [name, setName] = useState("");
@@ -58,30 +59,50 @@ export default function Expand(props) {
         setId(id);
         setName(name);
         setEmail(email);
-        setPassword("Password");
+        setPassword("password");
         setRoles(roles);
         setIsModalVisible(true)
         
     }
     const handleDelete = (id) => () => {
-        fetch({
-            url: '/deleteAdmin/' + id,
-            method: 'post',
-            headers: {
-                'public-request': 'true'
+        confirm({
+            title: "Do you want to delete these items?",
+            content:
+              "When clicked the OK button, this dialog will be closed after 1 second",
+            onOk() {
+                fetch({
+                    url: '/deleteAdmin/' + id,
+                    method: 'post',
+                    headers: {
+                        'public-request': 'true'
+                    },
+                }).then((resp) => {
+                    setReloadState(s => !s);
+                   
+                })
             },
-        }).then((resp) => {
-            setReloadState(s => !s);
+            onCancel() { }
+          });
+        
+        // fetch({
+        //     url: '/deleteAdmin/' + id,
+        //     method: 'post',
+        //     headers: {
+        //         'public-request': 'true'
+        //     },
+        // }).then((resp) => {
+        //     setReloadState(s => !s);
            
-        })
+        // })
     }
     const handleOk = () => {
-        let new_data = {
+        let params = {
             name: name,
             email: email,
             password: password,
             role: roles
         }
+        // console.log(new_data);
 
         fetch({
             url: '/editAdmin/' +id,
@@ -89,8 +110,10 @@ export default function Expand(props) {
             headers: {
                 'public-request': 'true'
             },
+            params
             
         }).then((resp) => {
+            setReloadState(s => !s);
         })
         setIsModalVisible(false);
     };
@@ -135,6 +158,9 @@ export default function Expand(props) {
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     }
+    const handleSelectChange = (e) => {
+        setRoles(e);
+    }
     return (
         <>
             <Table columns={columns} dataSource={data}  loading={loading} />
@@ -158,8 +184,10 @@ export default function Expand(props) {
                         <Input type="password" value={password} onChange={handlePasswordChange} />
                     </Form.Item>
                     <Form.Item label="Select Role">
-                        <Select>
-                            <Select.Option value={roles}>{roles}</Select.Option>
+                        <Select value={roles} onChange={handleSelectChange}>
+                            {props.roles.map((item, key) => {
+								 return <Select.Option   value={item.name.toString()} key={key}>{item.name.toString()}</Select.Option>
+							 })} 
                         </Select>
                     </Form.Item>
                 </Form>
