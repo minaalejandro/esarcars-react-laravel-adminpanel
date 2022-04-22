@@ -539,7 +539,9 @@ export default function Expand(props) {
               </div>
               {photo_show && selCar === record.key && (
                 <div className="car_image">
-                  {renderImages(record.key)}
+                  <Image.PreviewGroup>
+                    {renderImages(record.key)}
+                  </Image.PreviewGroup>
                 </div>
               )}
               <div className="photo_info"><h3>Car insurance</h3>
