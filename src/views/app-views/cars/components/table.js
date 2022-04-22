@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from 'antd';
+import { Table, Modal, Button, Image } from 'antd';
 import fetch from 'auth/FetchInterceptor'
 import '../../custom.css';
 import { 
@@ -10,6 +10,15 @@ import {
   CheckOutlined,
   DeleteOutlined   
 } from '@ant-design/icons';
+
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 
 export default function Expand(props) {
 
@@ -313,7 +322,6 @@ export default function Expand(props) {
           // description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
         }
         data.push(new_data);
-        console.log(data);
       })
       setData(data);
       props.getTableData(data)
@@ -322,6 +330,7 @@ export default function Expand(props) {
   }
 
   const expandPhotoDiv = (key) => () => {
+    console.log("phto div button click event");
     if (selCar !== key) {
       setSelCar(key);
 
@@ -332,12 +341,14 @@ export default function Expand(props) {
           'public-request': 'true'
         },
       }).then((resp) => {
+        console.log(resp);
         setImages({ ...images, [key]: resp.images });
         setPhotoShow(true);
       })
     } else
       setPhotoShow(s => !s);
   }
+  console.log(images);
   const expandCarInsuranceDiv = (key) => () =>{
     if (selCarInsurance !== key) {
       setSelCarInsurance(key);
@@ -348,7 +359,6 @@ export default function Expand(props) {
           'public-request': 'true'
         },
       }).then((resp) => { 
-        // console.log(resp);
         setCarInsuranceData(resp);  
         setCarInsuranceShow(true);
       })
@@ -386,6 +396,18 @@ export default function Expand(props) {
       results: pager.pageSize,
       dates: props.startDate + "," + props.endDate,
       search: props.searchText
+    });
+  };
+
+  const renderImages = (key) => {
+    return images[key] && images[key].map((item, index) => {
+      return (
+        <Image
+          key={index}
+          width={200}
+          src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path}
+        />
+      );
     });
   };
 
@@ -515,11 +537,11 @@ export default function Expand(props) {
               <div className="photo_info"><h3>Photos:{record.key in images ? images[record.key].length : 0}</h3>
                 <button onClick={expandPhotoDiv(record.key)}>{photo_show && selCar === record.key ? <UpOutlined /> : <DownOutlined />}</button>
               </div>
-              {photo_show && selCar === record.key && <div className="car_image">{
-                record.key in images && images[record.key].map((item, index) => {
-                  return <div key={index}><img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + item.small_image_path} width="330" height="230" /></div>
-                })
-              }</div>}
+              {photo_show && selCar === record.key && (
+                <div className="car_image">
+                  {renderImages(record.key)}
+                </div>
+              )}
               <div className="photo_info"><h3>Car insurance</h3>
                 <button onClick={expandCarInsuranceDiv(record.key)}>{car_insurance_show && selCarInsurance=== record.key ?  <UpOutlined /> : <DownOutlined />}</button>
               </div>
