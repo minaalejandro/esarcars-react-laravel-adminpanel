@@ -77,7 +77,7 @@ const Users = () => {
 	doc.setFontSize(15);
 
 	const title = "Cars List";
-	const headers = [["CARDID", "Manufactuer","Model","Year","City","Active","OwnerId","OwnerName","CreatedOn"]];
+	const headers = [["ID", "FirstName","Model","LastName","Email","ListedCar","Joined","PhoneNumber","Car_trips","Active"]];
 
 	const data = tableData.map(item=> [
 		item.key,

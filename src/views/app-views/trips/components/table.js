@@ -159,7 +159,7 @@ export default function Expand(props) {
             setIsChangeStatusModalVisible(false);
             setStatus(true);
         })
-        
+
     };
 
     const handleWaiting = (id) => () => {
@@ -174,7 +174,7 @@ export default function Expand(props) {
             setStatus(true);
         })
     };
-    const handleStarted  = (id) => () => {
+    const handleStarted = (id) => () => {
         fetch({
             url: '/trips/start/' + id,
             method: 'post',
@@ -186,7 +186,7 @@ export default function Expand(props) {
             setStatus(true);
         })
     };
-    const handleCanceled  = (id) => () => {
+    const handleCanceled = (id) => () => {
         fetch({
             url: '/trips/cancel/' + id,
             method: 'post',
@@ -309,9 +309,21 @@ export default function Expand(props) {
                 data.push(new_data);
             })
             setData(data);
+            props.getTableData(data)
         })
     }
-
+    useEffect(() => {
+        if (props.startDate === undefined || props.searchText === undefined)
+            fetchProducts({ page: 1 });
+        else
+            fetchProducts({ page: 1, dates: props.startDate + "," + props.endDate, search: props.searchText });
+    }, []);
+    useEffect(() => {
+        if (props.startDate === undefined)
+            fetchProducts({ page: 1 });
+        else
+            fetchProducts({ page: 1, dates: props.startDate + "," + props.endDate, search: props.searchText });
+    }, [props.startDate, props.endDate, props.searchText]);
     useEffect(() => {
         fetchProducts({ page: 1 });
     }, [status, props.reloadState]);
@@ -321,9 +333,9 @@ export default function Expand(props) {
         setPagination({ ...pagination, current: pager.current });
         fetchProducts({
             page: pager.current,
-            // results: pager.pageSize,
-            // dates: props.startDate + "," + props.endDate,
-            // search: props.searchText,
+            results: pager.pageSize,
+            dates: props.startDate + "," + props.endDate,
+            search: props.searchText,
             // active: props.selectActive
         });
     };
