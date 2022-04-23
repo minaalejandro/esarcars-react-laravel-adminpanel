@@ -3,6 +3,7 @@
 	
 	"sidenav.menu.dashboard": "Dashboard",
 	"sidenav.menu.cars": "Cars",
+	"sidenav.menu.cars_data": "CarsData",
 	"sidenav.menu.users": "Users",
 	"sidenav.menu.trips": "Trips",
 	"sidenav.menu.earings": "Earings",

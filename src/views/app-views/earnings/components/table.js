@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table } from 'antd';
 import fetch from 'auth/FetchInterceptor';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const columns = [
     { title: 'ID', dataIndex: 'id', key: 1 },
@@ -18,9 +20,13 @@ const columns = [
 
 
 export default function Expand(props) {
+    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
     const [data, setData] = useState([]);
     const [eariningData, setEarningData] = useState({});
+    const [detailLoading, setDetailLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const fetchProducts = (params) => {
+        setLoading(true);
         fetch({
             url: '/report/earners/get/all',
             method: 'get',
@@ -29,6 +35,7 @@ export default function Expand(props) {
             },
             params
         }).then((resp) => {
+            setLoading(false);
             var data = [];
             var new_data = {};
             resp.data.users.map((item) => {
@@ -48,14 +55,30 @@ export default function Expand(props) {
                 data.push(new_data);
             })
             setData(data);
+            props.getTableData(data);
         })
     }
+
+    useEffect(() => {
+        if (props.startDate === undefined || props.searchText === undefined)
+            fetchProducts({ page: 1 });
+        else
+            fetchProducts({ page: 1, dates: props.startDate + "," + props.endDate, search: props.searchText });
+    }, []);
+
+    useEffect(() => {
+        if (props.startDate === undefined)
+            fetchProducts({ page: 1 });
+        else
+            fetchProducts({ page: 1, dates: props.startDate + "," + props.endDate, search: props.searchText });
+    }, [props.startDate, props.endDate, props.searchText]);
 
     useEffect(() => {
         fetchProducts({ page: 1 });
     }, []);
 
     const handleEarning = (id) => {
+
         fetch({
             url: '/report/earners/' + id,
             method: 'get',
@@ -63,10 +86,11 @@ export default function Expand(props) {
                 'public-request': 'true'
             },
         }).then((resp) => {
+            setDetailLoading(false);
             console.log(resp);
             console.log(resp.trips);
             // ({ ...images, [key]: resp.images });
-            setEarningData({...eariningData, [id]: resp.trips});
+            setEarningData({ ...eariningData, [id]: resp.trips });
         })
     }
     // console.log(eariningData);
@@ -78,31 +102,35 @@ export default function Expand(props) {
                     <div style={{ margin: 0 }}>
                         <div>
                             <div className="earing_detail_body">
-                                {record.id in eariningData  && eariningData[record.id].map((item , index) => {
-                                    return <div key={index} className="earing_detail" style={{justifyContent: 'space-between', padding: '10px 20px'}}>
-                                                <div className="earing_detail">
-                                                    <div>trip ID</div>
-                                                    <div key={index}>{item.id}</div>
-                                                </div>
-                                                <div className="earing_detail">
-                                                    <div>Owner Earings</div>
-                                                    <div key={index}>{item.id}</div>
-                                                </div>
-                                                <div className="earing_detail">
-                                                    <button style={{padding: '5px 40px', borderRadius: 5}}>Unpayed</button>
-                                                </div>
-                                            </div>
+                                {detailLoading && <Spin indicator={antIcon} />}
+                                {record.id in eariningData && eariningData[record.id].map((item, index) => {
+                                    return <div key={index} className="earing_detail" style={{ justifyContent: 'space-between', padding: '10px 20px' }}>
+                                        <div className="earing_detail">
+                                            <div>trip ID</div>
+                                            <div key={index}>{item.id}</div>
+                                        </div>
+                                        <div className="earing_detail">
+                                            <div>Owner Earings</div>
+                                            <div key={index}>{item.id}</div>
+                                        </div>
+                                        <div className="earing_detail">
+                                            <button style={{ padding: '5px 40px', borderRadius: 5 }}>Unpayed</button>
+                                        </div>
+                                    </div>
                                 })}
                             </div>
                         </div>
                     </div>,
                 onExpand: (expanded, record) => {
+
                     if (expanded == true) {
+                        setDetailLoading(true)
                         handleEarning(record.id);
                     }
                 }
             }}
             dataSource={data}
+            loading={loading}
         />
     );
 

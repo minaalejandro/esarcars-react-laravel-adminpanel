@@ -6,7 +6,8 @@ import {
   EuroCircleOutlined,
   SolutionOutlined,
   LogoutOutlined,
-  TrophyOutlined 
+  TrophyOutlined ,
+  FileDoneOutlined
 } from '@ant-design/icons';
 import { APP_PREFIX_PATH } from 'configs/AppConfig'
 
@@ -22,6 +23,13 @@ const dashBoardNavTree = [{
   path: `${APP_PREFIX_PATH}/cars`,
   title: 'sidenav.menu.cars',
   icon: CarOutlined,
+  breadcrumb: false,
+  submenu: []
+},{
+  key: 'cars_data',
+  path: `${APP_PREFIX_PATH}/cars_data`,
+  title: 'sidenav.menu.cars_data',
+  icon: FileDoneOutlined,
   breadcrumb: false,
   submenu: []
 },{
