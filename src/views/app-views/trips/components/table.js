@@ -14,7 +14,7 @@ import {
 import { isEmpty } from "lodash";
 
 
-export default function Expand() {
+export default function Expand(props) {
     const { confirm } = Modal;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isChangeStatusModalVisible, setIsChangeStatusModalVisible] = useState(false);
@@ -138,26 +138,6 @@ export default function Expand() {
             setStatus(false);
         }
         setIsChangeStatusModalVisible(true);
-
-        // confirm({
-        //   title: "Do you want to change these items?",
-        //   content:
-        //     "Are you sure you want to change insurance verification status of car",
-        //   onOk() {
-        //     fetch({
-        //       url: '/trips/stop/' + id,
-        //       method: 'post',
-        //       headers: {
-        //         'public-request': 'true'
-        //       },
-        //     }).then((resp) => {
-
-        //         setStatus(true);
-        //     })
-        //   },
-
-        //   onCancel() { }
-        // });
     }
 
     const handleOk = () => {
@@ -334,7 +314,7 @@ export default function Expand() {
 
     useEffect(() => {
         fetchProducts({ page: 1 });
-    }, [status]);
+    }, [status, props.reloadState]);
 
     const handleTableChange = (pager, filters, sorter) => {
 

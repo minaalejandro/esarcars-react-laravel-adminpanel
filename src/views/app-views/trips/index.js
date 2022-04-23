@@ -9,10 +9,15 @@ const { RangePicker } = DatePicker;
 const { Search } = Input;
 
 const Tripas = () => {
+	const [reloadState, setReloadState] = useState(true);
+	const reloadButton = () =>{
+		setReloadState(s => !s);	
+	}
+
 	return (
 		<React.Fragment>
 			<div className='CarBtn'>
-				<Button >CARS LISTING</Button>
+				<Button onClick={reloadButton}>CARS LISTING</Button>
 				<RangePicker
 					// onChange={date => setSelectDate(date)}
 				/>
@@ -34,7 +39,7 @@ const Tripas = () => {
 				</Button>
 			</div>
 			<div>
-				<Table/>
+				<Table reloadState={reloadState}/>
 			</div>
 
 		</React.Fragment>

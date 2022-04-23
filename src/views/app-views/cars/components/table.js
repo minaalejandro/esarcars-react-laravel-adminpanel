@@ -596,7 +596,16 @@ export default function Expand(props) {
                 <div>
                   <div className="car_registraion_body">
                     <div className="car_registraion_body_left">
-                    <img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + carRegistraionData.small_car_registration_image} width="340" height="390" />
+                    {carRegistraionData.small_car_registration_image == null ?  <Image
+                      width={340}
+                      height={390}
+                      src={"https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg"}
+                    /> :<Image
+                    width={340}
+                    height={390}
+                    src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + carRegistraionData.small_car_registration_image}
+                    />}
+                    {/* <img src={"https://s3.ap-south-1.amazonaws.com/esarcar/" + carRegistraionData.small_car_registration_image} width="340" height="390" /> */}
                     </div>
                     <div className="car_registraion_body_right">
                       <div className="car_item">

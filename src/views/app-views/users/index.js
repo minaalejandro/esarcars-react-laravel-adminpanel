@@ -5,6 +5,10 @@ import { Select } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import '../custom.css';
 import Table from './components/table';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -17,6 +21,7 @@ const Users = () => {
 	const [endDate, setEndDate] = useState();
 	const [searchText, setSearchText] = useState();
 	const [selectActive, setSelectActive] = useState('');
+	const [tableData, setTableData]=useState([])
 
 	const reloadButton = () =>{
 		setReloadState(s => !s);
@@ -34,6 +39,68 @@ const Users = () => {
 	const handleChange = (value) => {
 		setSelectActive(value);
 	}
+
+	const getTableData=(data)=>{
+		setTableData(data);
+	}
+
+	const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+	const fileExtension = '.xlsx';
+
+	const exportToEXL = () => {
+		const data1 = tableData.map(item=> [
+		   item.key,
+		   item.first_name,
+		   item.last_name,
+		   item.email,
+		   item.listed_car,
+		   item.joined,
+		   item.phone_number,
+		   item.car_trips,
+		   item.active,
+	   ]);
+	   const ws = XLSX.utils.json_to_sheet(data1);
+	   const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+	   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+	   const data = new Blob([excelBuffer], {type: fileType});
+	   FileSaver.saveAs(data,  fileExtension);
+   }
+
+   const exportPDF = () => {
+	const unit = "pt";
+	const size = "A4"; // Use A1, A2, A3 or A4
+	const orientation = "portrait"; // portrait or landscape
+
+	const marginLeft = 40;
+	const doc = new jsPDF(orientation, unit, size);
+
+	doc.setFontSize(15);
+
+	const title = "Cars List";
+	const headers = [["CARDID", "Manufactuer","Model","Year","City","Active","OwnerId","OwnerName","CreatedOn"]];
+
+	const data = tableData.map(item=> [
+		item.key,
+		   item.first_name,
+		   item.last_name,
+		   item.email,
+		   item.listed_car,
+		   item.joined,
+		   item.phone_number,
+		   item.car_trips,
+		   item.active,
+	]);
+
+	let content = {
+	  startY: 50,
+	  head: headers,
+	  body: data
+	};
+
+	doc.text(title, marginLeft, 40);
+	doc.autoTable(content);
+	doc.save("report.pdf")
+  }
 
 	return (
 		<React.Fragment>
@@ -58,15 +125,15 @@ const Users = () => {
 				<Button type="default"   icon={<DownloadOutlined />}  >
 					CSV
 				</Button>
-				<Button type="default"  icon={<DownloadOutlined /> }>
+				<Button type="default"  icon={<DownloadOutlined /> }  onClick={(e) => exportToEXL()}>
 					EXCEL
 				</Button>
-				<Button type="default"  icon={<DownloadOutlined />} >
+				<Button type="default"  icon={<DownloadOutlined />}  onClick={() =>exportPDF()} >
 					PDF
 				</Button>
 			</div>
 			<div>
-				<Table reloadState={reloadState} startDate={startDate} endDate={endDate} searchText={searchText} selectActive={selectActive} />
+				<Table reloadState={reloadState} startDate={startDate} endDate={endDate} searchText={searchText} selectActive={selectActive} getTableData={getTableData} />
 			</div>
 
 		</React.Fragment>

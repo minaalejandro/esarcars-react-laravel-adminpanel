@@ -178,6 +178,7 @@ export default function Expand(props) {
               // console.log(data);
             })
             setData(data);   
+            props.getTableData(data)
         })
       }
       // console.log(data);
