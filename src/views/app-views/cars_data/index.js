@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Modal, Input , Form, Select,} from "antd";
+import '../custom.css';
 
 const CarsData = () => {
     return (
@@ -7,7 +8,7 @@ const CarsData = () => {
 			
 			<div className='RoleBtn'>
 				<h1>CARS DATA MANAGEMENT</h1>
-				<Button type="primary" >ADD DATA</Button>
+				<Button type="primary" >ADD CAR</Button>
 			</div>
 			<div>
 				{/* <Table reloadState={reloadState}/> */}
