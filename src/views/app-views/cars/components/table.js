@@ -249,7 +249,8 @@ export default function Expand(props) {
       url: '/cars',
       method: 'get',
       headers: {
-        'public-request': 'true'
+        'public-request': 'true',
+        "Access-Control-Allow-Headers": "'Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token'",
       },
       params
     }).then((resp) => {
@@ -328,7 +329,6 @@ export default function Expand(props) {
       
     })
   }
-
   const expandPhotoDiv = (key) => () => {
     console.log("phto div button click event");
     if (selCar !== key) {
@@ -348,7 +348,6 @@ export default function Expand(props) {
     } else
       setPhotoShow(s => !s);
   }
-  console.log(images);
   const expandCarInsuranceDiv = (key) => () =>{
     if (selCarInsurance !== key) {
       setSelCarInsurance(key);

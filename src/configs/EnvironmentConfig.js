@@ -1,6 +1,6 @@
 const dev = {
-  // API_ENDPOINT_URL: 'http://localhost:8000/api'
-  API_ENDPOINT_URL: 'https://whispering-wave-02168.herokuapp.com/public/api'
+  API_ENDPOINT_URL: 'http://localhost:8000/api'
+//   API           _ENDPOINT_URL: 'https://whispering-wave-02168.herokuapp.com/public/api'
 };
 
 const prod = {

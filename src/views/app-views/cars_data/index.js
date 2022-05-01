@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Modal, Input , Form, Select,} from "antd";
+import Table from './components/table';
 import '../custom.css';
 
 const CarsData = () => {
@@ -11,7 +12,7 @@ const CarsData = () => {
 				<Button type="primary" >ADD CAR</Button>
 			</div>
 			<div>
-				{/* <Table reloadState={reloadState}/> */}
+				<Table/>
 			</div>
 			{/* <Modal title="Add Admin" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form
