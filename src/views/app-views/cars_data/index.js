@@ -1,54 +1,124 @@
-import React from "react";
-import { Button, Modal, Input , Form, Select,} from "antd";
+import React, { useState } from "react";
+import { Button, Modal, Input, Form, Select, } from "antd";
 import Table from './components/table';
 import '../custom.css';
+import fetch from 'auth/FetchInterceptor'
 
 const CarsData = () => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [year, setYear] = useState("");
+    const [make, setMake] = useState("");
+    const [model, setModel] = useState("");
+    const [transmission, setTransmission] = useState("");
+    const [trim, setTrim] = useState("");
+    const [style, setStyle] = useState("");
+    const [reloadState, setReloadState] = useState(true);
+    const handleAddCar = () => {
+        setYear("")
+        setMake("")
+        setModel("")
+        setTrim("")
+        setStyle("")
+        setIsModalVisible(true);
+    }
+    const handleOk = () => {
+        let params = {
+            year: year,
+            make: make,
+            model: model,
+            transmission: transmission,
+            trim: trim,
+            style: style,
+        };
+        console.log(params);
+        fetch({
+            url: '/car_data',
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+            params,
+        }).then((resp) => {
+            // setIsModalVisible(false);
+            setYear("")
+            setMake("")
+            setModel("")
+            setTrim("")
+            setStyle("")
+            setReloadState(s => !s);
+            setTransmission("")
+            // // success();
+        })
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+    const handleYearChange = (e) => {
+        setYear(e.target.value);
+    }
+    const handleMakeChange = (e) => {
+        setMake(e.target.value);
+    }
+    const handleModelChange = (e) => {
+        setModel(e.target.value);
+    }
+    const handleSelectTransmission = (e) => {
+        setTransmission(e);
+    }
+    const handleTrimChange = (e) => {
+        setTrim(e.target.value);
+    }
+    const handleStyleChange = (e) => {
+        setStyle(e.target.value);
+    }
     return (
-		<React.Fragment>
-			
-			<div className='RoleBtn'>
-				<h1>CARS DATA MANAGEMENT</h1>
-				<Button type="primary" >ADD CAR</Button>
-			</div>
-			<div>
-				<Table/>
-			</div>
-			{/* <Modal title="Add Admin" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <React.Fragment>
+
+            <div className='RoleBtn'>
+                <h1>Cars Database</h1>
+                <Button type="primary" onClick={handleAddCar}>ADD CAR</Button>
+            </div>
+            <div>
+                <Table reloadState={reloadState} />
+            </div>
+            <Modal title="Add Car" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form
                     labelCol={{
-                        span: 4,
+                        span: 6,
                     }}
                     wrapperCol={{
-                        span: 14,
+                        span: 15,
                     }}
                     layout="horizontal"
                 >
-                    <Form.Item label="Name" rules={[{required: true, }, ]}>
-                        <Input onChange={handleNameChange} value={name} />
+                    <Form.Item label="Year" rules={[{ required: true, },]}>
+                        <Input onChange={handleYearChange} value={year} />
                     </Form.Item>
-                    <Form.Item label="Description" rules={[{required: true, }, ]} >
-                        <Input  onChange={handleDescriptionChange} value={description} />
+                    <Form.Item label="Make" rules={[{ required: true, },]} >
+                        <Input onChange={handleMakeChange} value={make} />
                     </Form.Item>
-                    <Form.Item label="Select Level" rules={[{required: true, }, ]}>
-                        <Select value={level} onChange={handleSelectLevel} >
-							<Select.Option   value="1" >1</Select.Option>
-							<Select.Option   value="2" >2</Select.Option>
-							<Select.Option   value="3" >3</Select.Option>
-                            <Select.Option   value="4" >4</Select.Option>
-							<Select.Option   value="5" >5</Select.Option>
-							<Select.Option   value="6" >6</Select.Option>
-							<Select.Option   value="7" >7</Select.Option>
-							<Select.Option   value="8" >8</Select.Option>
-							<Select.Option   value="9" >9</Select.Option>
+                    <Form.Item label="Model" rules={[{ required: true, },]} >
+                        <Input onChange={handleModelChange} value={model} />
+                    </Form.Item>
+                    <Form.Item label="Transmission" rules={[{ required: true, },]}>
+                        <Select value={transmission} onChange={handleSelectTransmission} >
+                            <Select.Option value="manual" >manual</Select.Option>
+                            <Select.Option value="automatic" >automatic</Select.Option>
                         </Select>
+                    </Form.Item>
+                    <Form.Item label="Trim" rules={[{ required: true, },]} >
+                        <Input onChange={handleTrimChange} value={trim} />
+                    </Form.Item>
+                    <Form.Item label="Style" rules={[{ required: true, },]} >
+                        <Input onChange={handleStyleChange} value={style} />
                     </Form.Item>
                 </Form>
 
-            </Modal> */}
+            </Modal>
 
-		</React.Fragment>
-	)
+        </React.Fragment>
+    )
 }
 
 export default CarsData

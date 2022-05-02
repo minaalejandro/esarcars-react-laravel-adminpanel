@@ -33,6 +33,13 @@ const dashBoardNavTree = [{
   breadcrumb: false,
   submenu: []
 },{
+  key: 'list_car',
+  path: `${APP_PREFIX_PATH}/list_car`,
+  title: 'sidenav.menu.list_car',
+  icon: FileDoneOutlined,
+  breadcrumb: false,
+  submenu: []
+},{
   key: 'users',
   path: `${APP_PREFIX_PATH}/users`,
   title: 'sidenav.menu.users',
