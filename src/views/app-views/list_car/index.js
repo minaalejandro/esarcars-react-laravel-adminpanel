@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Select } from 'antd';
+import { Select, Input } from 'antd';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 
 import '../custom.css';
 import fetch from 'auth/FetchInterceptor'
+import Flex from 'components/shared-components/Flex';
 
 function ListCar({ google, locations = [] }) {
     const [owners, setOwners] = useState([]);
-    const [markers, setMarkers] = useState([{ title: "Thek marker's title will appear as a tooltip", name: "SOMA", position: {  lat: -1.2884,
-        lng: 36.8233 } }])
-   
+    const [markers, setMarkers] = useState([{
+        title: "Thek marker's title will appear as a tooltip", name: "SOMA", position: {
+            lat: -1.2884,
+            lng: 36.8233
+        }
+    }])
+    const [year, setYear] = useState("");
+    const [disabled, setDisabled] = useState(true);
+    const [model_disabled, setModelDisabled] = useState(true);
+    const [transmission_disabled, setTransmissionDisable] = useState(true);
+    const [manufacturer, setManufacturer] = useState([]);
+    const [make, setMake] = useState("");
+    const [model, setModel] = useState([]);
+    const [selectedModel, setSelectedModel] = useState("");
+    const [transmission, setTransmission] = useState([]);
+
 
     const onClick = (t, map, coord) => {
         const { latLng } = coord;
         const lat = latLng.lat();
         const lng = latLng.lng();
         console.log(lat, lng);
-        setMarkers( [{title:"", name:"",position: { lat, lng }}]);
+        setMarkers([{ title: "", name: "", position: { lat, lng } }]);
         console.log(markers);
     }
 
@@ -52,6 +66,66 @@ function ListCar({ google, locations = [] }) {
     };
 
 
+    const selectYear = (e) => {
+        setYear(e.target.value);
+        if (e.target.value != "") {
+            if (e.target.value.length == 4) {
+                setDisabled(false);
+                fetch({
+                    url: '/choose-manufacturer/' + e.target.value,
+                    method: 'get',
+                    headers: {
+                        'public-request': 'true'
+                    },
+
+                }).then((resp) => {
+                    console.log(resp.data);
+                    setManufacturer(resp.data);
+                })
+            }
+        }
+    }
+    const selectModel = (e) => {
+        setMake(e);
+        let params = {
+            manufacturer: e,
+            year: year
+        }
+        setModelDisabled(false);
+        
+        fetch({
+            url: '/choose-model',
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+            params
+        }).then((resp) => {
+            console.log(resp.data);
+            setModel(resp.data);
+        })
+    }
+    const selectTransmisstion = (e) => {
+        setTransmissionDisable(false);
+        setSelectedModel(e);
+        let params = {
+            manufacturer: make,
+            year: year,
+            model: e,
+        }
+        
+        fetch({
+            url: '/choose-transmission',
+            method: 'post',
+            headers: {
+                'public-request': 'true'
+            },
+            params
+        }).then((resp) => {
+            // console.log(resp.data);
+            setTransmission(resp.data);
+        })
+    }
     return (
         <>
             <div className='car_list_header'>
@@ -61,7 +135,7 @@ function ListCar({ google, locations = [] }) {
                 <div className='car_list_user_search col-sm-3'>
                     <Select
                         showSearch
-                        placeholder="Select a person"
+                        placeholder="Select a email"
                         optionFilterProp="children"
                         className='input-width'
                         onChange={onChange}
@@ -90,7 +164,7 @@ function ListCar({ google, locations = [] }) {
                             }
                         }
                     >
-                        {markers.map((marker, index) => 
+                        {markers.map((marker, index) =>
                             <Marker
                                 key={index}
                                 title={marker.title}
@@ -104,7 +178,69 @@ function ListCar({ google, locations = [] }) {
                 </div>
             </div>
             <div className='car_list_footer'>
+                <div style={{ display: 'flex' }}>
+                    <div className='col'>
+                        <Input style={{ width: 200 }} placeholder="Select a Year" onChange={selectYear} value={year} />
+                    </div>
+                    {disabled ?
+                        <div className='col'>
+                            <Select style={{ width: 200 }} placeholder="Select a Make" disabled />
+                        </div> :
+                        <div className='col'>
+                            <Select style={{ width: 200 }} placeholder="Select a Make" onChange={selectModel} >
+                                {
+                                    manufacturer.map((item) => {
+                                        return <Option key={item.manufacturer}>{item.manufacturer}</Option>
+                                    })
+                                }
+                            </Select>
+                        </div>
 
+                    }
+                    {model_disabled ?
+                        <div className='col'>
+                            <Select style={{ width: 200 }} placeholder="Select a Model" disabled />
+                        </div> :
+                        <div className='col'>
+                            <Select style={{ width: 200 }} placeholder="Select a Model" onChange={selectTransmisstion} >
+
+                                {
+                                    model.map((item) =>
+                                        <Option key={item}>{item}</Option>
+                                    )
+                                }
+                            </Select>
+                        </div>
+                    }
+                    {transmission_disabled ? 
+                    <div className='col'>
+                        <Select style={{ width: 200 }} placeholder="Select a Transmission" disabled />
+                    </div> :
+                    <div className='col'>
+                     <Select style={{ width: 200 }} placeholder="Select a Transmission"  >
+                     {
+                                    transmission.map((item) => {
+                                        return <Option key={item.modelTransmissionType}>{item.modelTransmissionType}</Option>
+                                    })
+                                }
+                     </Select>
+                     </div>}
+                    
+                </div>
+                <div style={{ display: 'flex' }}>
+                    <div className='col'>
+                        <Select style={{ width: 200 }} placeholder="Select a Odometer" disabled />
+                    </div>
+                    <div className='col'>
+                        <Select style={{ width: 200 }} placeholder="Select a Trim" disabled />
+                    </div>
+                    <div className='col'>
+                        <Select style={{ width: 200 }} placeholder="Select a Style" disabled />
+                    </div>
+                    <div className='col'>
+                        <Select style={{ width: 200 }} placeholder="Select a Value" disabled />
+                    </div>
+                </div>
             </div>
         </>
     )
