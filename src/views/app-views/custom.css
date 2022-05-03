@@ -184,3 +184,26 @@
     display: flex;
     justify-content: space-between;
 }
+
+.car_list_map {
+    position: relative;
+    height: 250px;
+}
+
+.row {
+    display: flex;
+}
+
+.col-sm-3 {
+    width: 30%
+}
+.col-sm-9 {
+    width: 80%;
+}
+
+.car_list_header {
+    padding: 13px;
+}
+.input-width {
+    width: 250px;
+}
