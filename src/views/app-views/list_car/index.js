@@ -359,7 +359,7 @@ function ListCar({ google, locations = [] }) {
                         type="primary"
                         onClick={() => message.success("Processing complete!")}
                     >
-                        Done
+                        Finish
                     </Button>
                 )}
                 {step > 0 && (

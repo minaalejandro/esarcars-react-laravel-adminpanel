@@ -242,3 +242,15 @@
   .customize_padding{
       padding:15px;
   }
+
+  .upload_photo {
+      padding-bottom: 15px;
+  }
+
+  .padding-top {
+      padding-top: 15px;
+  }
+
+  .ant-checkbox-group-item{
+      width: 300px;
+  }
