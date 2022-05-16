@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Upload, Modal, Checkbox } from 'antd';
+import { Input, Upload, Modal, Checkbox, DatePicker, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 function getBase64(file) {
@@ -15,7 +15,7 @@ function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
 }
 const options1 = [
-  { label: 'GPS', value: 'Apple'},
+  { label: 'GPS', value: 'Apple' },
   { label: 'Child seat', value: 'Pear' },
   { label: 'USB input', value: 'Orange' },
 ];
@@ -41,6 +41,7 @@ const options5 = [
 ];
 function Customiz() {
   const { TextArea } = Input;
+  const { RangePicker } = DatePicker;
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const [previewImage, setPreviewImage] = React.useState('');
   const [fileList, setFileList] = React.useState([]);
@@ -82,7 +83,7 @@ function Customiz() {
         </div>
         <div className='customize_padding'>
           <div>
-            License plate details
+            City,state,country
           </div>
           <div>
             <Input style={{ width: '350px' }} placeholder="start typing...." />
@@ -95,7 +96,9 @@ function Customiz() {
             Date of issue
           </div>
           <div>
-            <Input style={{ width: '200px' }} placeholder="Plate number" />
+            <Space direction="vertical" size={12}>
+            <DatePicker renderExtraFooter={() => 'extra footer'} />
+            </Space>
           </div>
         </div>
         <div className='customize_padding'>
@@ -103,7 +106,9 @@ function Customiz() {
             Expiration date
           </div>
           <div>
-            <Input style={{ width: '200px' }} placeholder="start typing...." />
+          <Space direction="vertical" size={12}>
+          <DatePicker renderExtraFooter={() => 'extra footer'} />
+            </Space>
           </div>
         </div>
       </div>
@@ -146,19 +151,19 @@ function Customiz() {
             Car features
           </h3>
           <div>
-            <Checkbox.Group options={options1}  onChange={onChange} />
+            <Checkbox.Group options={options1} onChange={onChange} />
             <br />
             <br />
-            <Checkbox.Group options={options2}  onChange={onChange} />
+            <Checkbox.Group options={options2} onChange={onChange} />
             <br />
             <br />
-            <Checkbox.Group options={options3}  onChange={onChange} />
+            <Checkbox.Group options={options3} onChange={onChange} />
             <br />
             <br />
-            <Checkbox.Group options={options4}  onChange={onChange} />
+            <Checkbox.Group options={options4} onChange={onChange} />
             <br />
             <br />
-            <Checkbox.Group options={options5}  onChange={onChange} />
+            <Checkbox.Group options={options5} onChange={onChange} />
             <br />
             <br />
           </div>

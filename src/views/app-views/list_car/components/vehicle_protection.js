@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Input, Upload, Modal } from 'antd';
+import { Select, Input, Upload, Modal, DatePicker, Space  } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 function getBase64(file) {
@@ -12,7 +12,6 @@ function getBase64(file) {
 }
 
 function VehicleProtection() {
-  const { Option } = Select;
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const [previewImage, setPreviewImage] = React.useState('');
   const [fileList, setFileList] = React.useState([]);
@@ -67,7 +66,7 @@ function VehicleProtection() {
             Date of issue
           </div>
           <div>
-            <Input style={{ width: '200px' }} placeholder="Plate number" />
+          <DatePicker renderExtraFooter={() => 'extra footer'} />
           </div>
         </div>
         <div className='customize_padding'>
@@ -75,7 +74,7 @@ function VehicleProtection() {
             Expiration date
           </div>
           <div>
-            <Input style={{ width: '200px' }} placeholder="start typing...." />
+          <DatePicker renderExtraFooter={() => 'extra footer'} />
           </div>
         </div>
       </div>
