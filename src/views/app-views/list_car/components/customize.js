@@ -66,7 +66,7 @@ function Customiz() {
 
   const handleChange = ({ fileList }) => {
     console.log(fileList);
-    setFileList([...fileList]);
+    setFileList([...fileList]); 
   }
 
   return (
