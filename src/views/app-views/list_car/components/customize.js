@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input, Upload, Modal, Checkbox, DatePicker, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import Autocomplete from "react-google-autocomplete";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -66,7 +67,7 @@ function Customiz() {
 
   const handleChange = ({ fileList }) => {
     console.log(fileList);
-    setFileList([...fileList]); 
+    setFileList([...fileList]);
   }
 
   return (
@@ -86,7 +87,18 @@ function Customiz() {
             City,state,country
           </div>
           <div>
-            <Input style={{ width: '350px' }} placeholder="start typing...." />
+            <Autocomplete
+              apiKey="AIzaSyA2vMx4B8g6zWCf3xYUxC40xePaunWQ6Tc"
+              style={{ width: "90%" }}
+              onPlaceSelected={(place) => {
+                console.log(place);
+              }}
+              options={{
+                types: ["(regions)"],
+                componentRestrictions: { country: "ru" },
+              }}
+              defaultValue="Amsterdam"
+            />;
           </div>
         </div>
       </div>
@@ -97,7 +109,7 @@ function Customiz() {
           </div>
           <div>
             <Space direction="vertical" size={12}>
-            <DatePicker renderExtraFooter={() => 'extra footer'} />
+              <DatePicker renderExtraFooter={() => 'extra footer'} />
             </Space>
           </div>
         </div>
@@ -106,8 +118,8 @@ function Customiz() {
             Expiration date
           </div>
           <div>
-          <Space direction="vertical" size={12}>
-          <DatePicker renderExtraFooter={() => 'extra footer'} />
+            <Space direction="vertical" size={12}>
+              <DatePicker renderExtraFooter={() => 'extra footer'} />
             </Space>
           </div>
         </div>
